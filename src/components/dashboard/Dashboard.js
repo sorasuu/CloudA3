@@ -22,20 +22,20 @@ class Dashboard extends Component {
 
   }
   UNSAFE_componentWillReceiveProps(nextProps){
-    var sitesApprove= []
-   
-    if(nextProps.sitesApproved){
-  nextProps.sitesApproved.map(siteApproved=>{
+      const sitesApprove = [];
+
+      if(nextProps.sitesApproved){
+    nextProps.sitesApproved.map(siteApproved=>{
       const data = {
         name:siteApproved.title,
         address:siteApproved.address,
         startDate: Date(siteApproved.startDate),
         endDate:Date(siteApproved.endDate),
         id: siteApproved.id
-      }
+      };
       sitesApprove.push(data)
-    })
-    console.log(sitesApprove,"klhjkjik")
+    });
+    console.log(sitesApprove,"haha")
     this.setState({
       dataApproval:sitesApprove
     })
@@ -62,7 +62,7 @@ class Dashboard extends Component {
           
         />
       );
-    }
+    };
     return (
       <div className="container">
       
@@ -87,7 +87,7 @@ const mapStateToProps = (state) => {
     auth: state.firebase.auth,
     notifications: state.firestore.ordered.notifications
   }
-}
+};
 
 export default compose(
   connect(mapStateToProps),

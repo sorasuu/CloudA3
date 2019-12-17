@@ -34,7 +34,7 @@ class MapWithAllMarker extends React.Component {
     }
   }
   render() {
-    console.log(this.props, "jadfasfdasf")
+    console.log(this.props, "AllMarker Props")
     return (
       // <Grid container spacing={3}>
       this.state.sites?
