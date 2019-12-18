@@ -375,8 +375,10 @@ const mapDispatchToProps = dispatch => {
 
 export default compose(
   connect(mapStateToProps,mapDispatchToProps),
-  firestoreConnect([
-    { collection: 'sites', where:[["pending","==",true]], storeAs:'sitesPending' },{ collection: 'sites', where:[["pending","==",false]], storeAs:'sitesApproved' },{ collection: 'sites', where:[["done","==",true]], storeAs:'sitesDone' },
-    { collection: 'notifications', limit: 3, orderBy: ['time', 'desc'] }
-  ])
+  firestoreConnect((props) => {
+    if(!props.auth.uid){
+        props.history.push("/")
+    }else{
+      return[{ collection: 'sites', where:[["pending","==",true]], storeAs:'sitesPending' },{ collection: 'sites', where:[["pending","==",false]], storeAs:'sitesApproved' },{ collection: 'sites', where:[["done","==",true]], storeAs:'sitesDone' },{ collection: 'notifications', limit: 3, orderBy: ['time', 'desc'] }]}
+    })
 )(withStyles(useStyles)(AdminDashboard) )
