@@ -14,7 +14,7 @@ import {createVolunteer} from '../../store/actions/voluteerAction'
 import {editSite} from '../../store/actions/siteActions'
 function MapMarker(site) {
 
-  console.log(site, "Marker Site")
+  console.log(site, "Marker Site");
 
   return (
     <GoogleMap
@@ -43,9 +43,9 @@ function MapMarker(site) {
   )
 }
 
-const API_KEY = 'AIzaSyCukFLNeMl4inkvLQ8ZNNQzbC3q1zmcibI'
+const API_KEY = 'AIzaSyCukFLNeMl4inkvLQ8ZNNQzbC3q1zmcibI';
 
-const MapWrapped = withScriptjs(withGoogleMap(MapMarker))
+const MapWrapped = withScriptjs(withGoogleMap(MapMarker));
 
 function FormError(props){
   if (props.isHidden){return null;}
@@ -65,7 +65,7 @@ const validateInput = (checkingText) =>{
     return { isInputValid: false,
     errorMessage: 'Error '}
   }
-}
+};
 
 class SiteDetails extends React.Component {
   state = {
@@ -107,10 +107,10 @@ class SiteDetails extends React.Component {
       email: this.state.email,
       phoneNumber: this.state.phoneNumber,
       siteId: this.props.match.params.id
-    }
+    };
     this.props.createVolunteer(volunteer);
     this.props.history.push('/');
-  }
+  };
   handleSubmitDone = (e) => {
     e.preventDefault();
     console.log(this.state);
@@ -287,10 +287,6 @@ class SiteDetails extends React.Component {
             </div> : null}
           </div>    
           </div>
-        
-
-
-
 
       )
     } else {
