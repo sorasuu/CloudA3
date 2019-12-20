@@ -90,9 +90,14 @@ class MapWithAllMarker extends React.Component {
         { title: "Ảnh Đại Diện", field: "avatar" }
         // { title: 'Ngày Kết Thúc', field: 'endDate' },
       ],
-      dataApproval: []
+      dataApproval: [],
+      currentMarker:'',
     };
   }
+  updateShared(shared_value) {
+    this.setState({currentMarker: shared_value});
+}
+
   UNSAFE_componentWillReceiveProps(nextProps) {
     //   if (nextProps.sites) {
     //     this.setState({
@@ -159,8 +164,8 @@ class MapWithAllMarker extends React.Component {
       }, [open]);
 
       const handleHover = () => {};
-      const handleClick = () => {
-        console.log("Clicked on", this);
+      const handleClick = (id) => {
+        console.log("Clicked on", id);
         console.log("set again", )
         // <Link to={'/site/'+site.id}/>
       };
@@ -223,7 +228,8 @@ class MapWithAllMarker extends React.Component {
                         role="checkbox"
                         tabIndex={-1}
                         key={row.id}
-                        onClick={handleClick}
+                        onClick={handleClick(row.id)}
+                        currentMarker={this.state.currentMarker}
                       >
                         {this.state.columns.map(column => {
                           const value = row[column.field];
@@ -263,6 +269,7 @@ class MapWithAllMarker extends React.Component {
               containerElement={<div style={{ height: `100%` }} />}
               mapElement={<div style={{ height: `100%` }} />}
               props={this.props}
+              currentMarker={this.state.currentMarker}
             />
           </Grid>
           <Grid item xs={1}>

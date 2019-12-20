@@ -31,3 +31,16 @@ export const editSite = (site) => {
     });
   }
 };
+export const updateSite = (site) => {
+  return (dispatch, getState, {getFirestore}) => {
+    const firestore = getFirestore();
+
+    firestore.collection('sites').doc(site.id).update({
+      "siteClicked":site.isClicked
+    }).then(() => {
+      dispatch({ type: 'UPDATE_SITE_SUCCESS' });
+    }).catch(err => {
+      dispatch({ type: 'UPDATE_SITE_ERROR' }, err);
+    });
+  }
+};
