@@ -6,7 +6,6 @@ import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css"
 import MapWithSearch from './MapWithSearch'
 import { Checkbox, Button } from '@material-ui/core'
-import { textAlign } from '@material-ui/system'
 
 
 function FormError(props){
