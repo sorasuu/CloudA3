@@ -1,4 +1,5 @@
 import firebase from 'firebase/app';
+
 export const signIn = (credentials) => {
   return (dispatch, getState, {getFirebase}) => {
     const getfirebase = getFirebase();
@@ -20,7 +21,7 @@ export const signInWithFaceBook = () => {
       const firestore = getFirestore()
      firebase.auth().signInWithRedirect(provider).then(resp => {
        console.log("success")
-     
+       
     }).then(() => {
       dispatch({ type: 'LOGIN_FACEBOOK_SUCCESS' });
     }).catch((err) => {
@@ -43,15 +44,18 @@ export const signInWithGoogle = () => {
       dispatch({ type: 'LOGIN_GOOGLE_SUCCESS' });
     }).catch((err) => {
       dispatch({ type: 'LOGIN_GOOGLE_ERROR', err });
+    
     });}}
 
-export const signOut = () => {
+export const signOut = (props) => {
   return (dispatch, getState, {getFirebase}) => {
     const getfirebase = getFirebase();
-
+    
     getfirebase.auth().signOut().then(() => {
       dispatch({ type: 'SIGNOUT_SUCCESS' })
+      
     });
+  
   }
 }
 

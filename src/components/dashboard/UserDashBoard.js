@@ -406,9 +406,11 @@ const mapStateToProps = (state) => {
   export default compose(
     connect(mapStateToProps),
     firestoreConnect((props) => {
+        if(!props.auth.uid){
+            props.history.push("/")
+        }else{
       return  [{ collection: 'sites', where:[["pending","==",true], ["authorId",'==',props.auth.uid]], storeAs:'sitesPending' },{ collection: 'sites', where:[["pending","==",false],["authorId",'==',props.auth.uid]], storeAs:'sitesApproved' },{ collection: 'sites', where:[["done","==",true], ["authorId",'==',props.auth.uid]], storeAs:'sitesDone' },
-              { collection: 'notifications', limit: 3, where:[ ["uid",'==',props.auth.uid]] }
-              ]
-      })
+              { collection: 'notifications', limit: 3, where:[ ["uid",'==',props.auth.uid]] }]
+      }})
     )(withStyles(useStyles)(UserDashboard) )
 //   
