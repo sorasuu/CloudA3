@@ -31,8 +31,7 @@ export const editSite = (site) => {
     });
   }
 };
-<<<<<<< HEAD
-=======
+
 export const updateSite = (site) => {
   return (dispatch, getState, {getFirestore}) => {
     const firestore = getFirestore();
@@ -46,4 +45,4 @@ export const updateSite = (site) => {
     });
   }
 };
->>>>>>> e346a0d61f03bd6be9837a27d89d005ab05b1d82
+

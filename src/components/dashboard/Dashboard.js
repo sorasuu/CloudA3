@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import MaterialTable from "material-table";
 import { Redirect, Link } from "react-router-dom";
-import MapWithAllMarker from "../layout/MapWithAllMarker";
+import MapWithAllMarker from "../maps/MapWithAllMarker";
 import { firestoreConnect } from "react-redux-firebase";
 import { connect } from "react-redux";
 import { compose } from "redux";

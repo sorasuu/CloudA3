@@ -43,7 +43,8 @@ const invoiceSubtotal = subtotal(rows);
 const invoiceTaxes = TAX_RATE * invoiceSubtotal;
 const invoiceTotal = invoiceTaxes + invoiceSubtotal;
 
-function CollectionTable(){
+function CollectionTable(props){
+    console.log(props, 'prop trong ColTab');
     const classes = useStyles();
 
     return (

@@ -4,12 +4,7 @@ import { createSite } from '../../store/actions/siteActions'
 import { Redirect } from 'react-router-dom'
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css"
-import MapWithSearch from './MapWithSearch'
-<<<<<<< HEAD
-=======
-import { Checkbox, Button } from '@material-ui/core'
-
->>>>>>> e346a0d61f03bd6be9837a27d89d005ab05b1d82
+import MapWithSearch from '../maps/MapWithSearch'
 
 function FormError(props){
   if (props.isHidden){return null;}

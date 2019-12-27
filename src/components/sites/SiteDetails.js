@@ -3,16 +3,7 @@ import { connect } from "react-redux";
 import { firestoreConnect } from "react-redux-firebase";
 import { compose } from "redux";
 import DatePicker from "react-datepicker";
-import { makeStyles } from '@material-ui/core/styles';
 import CollectionTable from './collectionTable'
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-
 import { Grid, Divider, Button, Checkbox } from "@material-ui/core";
 import Dropzone from "react-dropzone-uploader";
 import "react-dropzone-uploader/dist/styles.css";
@@ -29,8 +20,6 @@ import * as FileSaver from "file-saver";
 import { createVolunteer } from "../../store/actions/voluteerAction";
 import { editSite } from "../../store/actions/siteActions";
 function MapMarker(site) {
-  // console.log(site, "Marker Site");
-
   return (
     <GoogleMap
       defaultZoom={10}
@@ -109,43 +98,6 @@ const ImageAudioVideo = () => {
     />
   );
 };
-
-// for create collection table
-const TAX_RATE = 0.07;
-
-const useStyles = makeStyles({
-  table: {
-    minWidth: 700,
-  },
-});
-
-function ccyFormat(num) {
-  return `${num.toFixed(2)}`;
-}
-
-function priceRow(qty, unit) {
-  return qty * unit;
-}
-
-function createRow(desc, qty, unit) {
-  const price = priceRow(qty, unit);
-  return { desc, qty, unit, price };
-}
-
-function subtotal(items) {
-  return items.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
-}
-
-const rows = [
-  createRow('Paperclips (Box)', 100, 1.15),
-  createRow('Paper (Case)', 10, 45.99),
-  createRow('Waste Basket', 2, 17.99),
-];
-
-const invoiceSubtotal = subtotal(rows);
-const invoiceTaxes = TAX_RATE * invoiceSubtotal;
-const invoiceTotal = invoiceTaxes + invoiceSubtotal;
-
 
 class SiteDetails extends React.Component {
   constructor(props) {
@@ -463,7 +415,9 @@ class SiteDetails extends React.Component {
               ) : null}
               </Grid>
             </Grid>
-            <CollectionTable/>
+            <CollectionTable
+            props={this.props}
+            />
           </div>
         </div>
       );
