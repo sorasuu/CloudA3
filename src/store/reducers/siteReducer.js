@@ -1,4 +1,4 @@
-const initState = {}
+const initState = {};
 
 const siteReducer = (state = initState, action) => {
   switch (action.type) {

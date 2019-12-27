@@ -7,19 +7,19 @@ class SignIn extends Component {
   state = {
     email: '',
     password: ''
-  }
+  };
   handleChange = (e) => {
     this.setState({
       [e.target.id]: e.target.value
     })
-  }
+  };
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.signIn(this.state)
-  }
+  };
   render() {
     const { authError, auth } = this.props;
-    if (auth.uid) return <Redirect to='/' /> 
+    if (auth.uid) return <Redirect to='/' /> ;
     return (
       <div className="container">
         <form className="white" onSubmit={this.handleSubmit}>
@@ -51,7 +51,7 @@ const mapStateToProps = (state) => {
     authError: state.auth.authError,
     auth: state.firebase.auth
   }
-}
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -59,6 +59,6 @@ const mapDispatchToProps = (dispatch) => {
     signInWithFaceBook : ()=> dispatch(signInWithFaceBook()),
     signInWithGoogle : ()=> dispatch(signInWithGoogle())
   }
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignIn)

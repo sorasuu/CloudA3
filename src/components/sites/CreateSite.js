@@ -5,9 +5,6 @@ import { Redirect } from 'react-router-dom'
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css"
 import MapWithSearch from './MapWithSearch'
-import { Checkbox, Button } from '@material-ui/core'
-import { textAlign } from '@material-ui/system'
-
 
 function FormError(props){
   if (props.isHidden){return null;}
@@ -27,7 +24,7 @@ const validateInput = (checkingText) =>{
     return { isInputValid: false,
     errorMessage: 'Error '}
   }
-}
+};
 
 class CreateSite extends Component {
 
@@ -45,12 +42,12 @@ class CreateSite extends Component {
     showMap: false,
     confirm: false,
     pending: true,
-  }
+  };
   handleChange = (e) => {
     this.setState({
       [e.target.id]: e.target.value
     })
-  }
+  };
   handleSubmit = (e) => {
     e.preventDefault();
     console.log(this.state);
@@ -61,27 +58,24 @@ class CreateSite extends Component {
   });
     this.props.history.push('/');
     localStorage.clear();
-  }
+  };
   handleChangeStart = date => {
     this.setState({
       startDate: date
     });
-  }
+  };
   handleChangeEnd = date => {
     this.setState({
       endDate: date
     });
-  }
-  // callbackfromchild = childlocation =>{
-  //   console.log(childlocation)
-  //   this.setState({ location : childlocation})
-  // }
+  };
+
   handleShowMap(){
     this.setState({showMap: !this.state.showMap})
   }
   render() {
     const { auth } = this.props;
-    if (!auth.uid)  return <Redirect to='/signin' />
+    if (!auth.uid)  return <Redirect to='/signin' />;
 
     return (
       <div className="container">
@@ -111,7 +105,11 @@ class CreateSite extends Component {
               <DatePicker
                 selected={this.state.startDate}
                 onChange={this.handleChangeStart}
-                dateFormat="d MMMM, yyyy"
+                showTimeSelect
+                timeFormat="HH:mm"
+                timeInterval={15}
+                timeCaption = "time"
+                dateFormat="d MMMM, yyyy h:mm aa"
               />
             </div>
             <div className="col xs=6 sm=6 md=6">
@@ -119,20 +117,22 @@ class CreateSite extends Component {
               <DatePicker
                 selected={this.state.endDate}
                 onChange={this.handleChangeEnd}
-                dateFormat="d MMMM, yyyy"
+                showTimeSelect
+                timeFormat="HH:mm"
+                timeInterval={15}
+                timeCaption = "time"
+                dateFormat="d MMMM, yyyy h:mm aa"
               />
             </div>
           </div>
           
-            <Checkbox checked= {this.state.showMap} onClick ={(e) => { this.handleShowMap(e)}}/>
-              Chọn Địa Điểm Sau Khi Hoàn Thiện Thông Tin Liên Lạc
-            {this.state.showMap ?<MapWithSearch
+           <MapWithSearch
               google = {this.props.google}
               center = {{lat: 10.7296192, lng: 106.6943174}}
               height ='300px'
               zoom={15}
-              locationFromChild = {this.callbackfromchild}
-            />:null}
+              // locationFromChild = {this.callbackfromchild}
+            />
         
           <div className="input-field">
             <button className="btn lighten-1" color="#39B04B">Tạo Sự Kiện</button>

@@ -5,7 +5,6 @@ import {
   MenuList,
   MenuItem,
   Grid,
-  useTheme,
   withStyles,
   TableRow,
   Popper,
@@ -14,8 +13,6 @@ import {
   Grow
 } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
 import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import { firestoreConnect } from "react-redux-firebase";
@@ -67,19 +64,8 @@ const useStyles = theme => ({
   tabs: {
     borderRight: `1px solid ${theme.palette.divider}`
   }
-  // listItem: {
-  //   "&:hover": {
-  //     backgroundColor: "green !important"
-  //   }
-  // }
 });
 
-// const filterOptions = [
-//   "Tìm Kiểu Theo:",
-//   "Địa Điểm Tổ Chức",
-//   "Số Người Tham Gia",
-//   "Ngày Tổ Chức"
-// ];
 class MapWithAllMarker extends React.Component {
   constructor(props) {
     super(props);
@@ -90,15 +76,11 @@ class MapWithAllMarker extends React.Component {
         { title: "Ảnh Đại Diện", field: "avatar" }
         // { title: 'Ngày Kết Thúc', field: 'endDate' },
       ],
-      dataApproval: []
+      dataApproval: [],
+
     };
   }
   UNSAFE_componentWillReceiveProps(nextProps) {
-    //   if (nextProps.sites) {
-    //     this.setState({
-    //       sites: nextProps.sites
-    //     });
-    //   }
     const sitesApprove = [];
     if (nextProps.sitesApproved) {
       nextProps.sitesApproved.map(siteApproved => {
@@ -124,20 +106,18 @@ class MapWithAllMarker extends React.Component {
 
     const AllSitesTable = () => {
       const { classes } = this.props;
-      const [page, setPage] = React.useState(0);
-      const [rowsPerPage] = React.useState(5);
-      const theme = useTheme();
+      console.log(this.props, 'this props trong allsitestable');
+      // const choseId = this.props.chosenPlaceId;
       const [open, setOpen] = React.useState(false);
-
       const anchorRef = React.useRef(null);
       const handleToggle = () => {
         setOpen(prevOpen => !prevOpen);
       };
+
       const handleClose = event => {
         if (anchorRef.current && anchorRef.current.contains(event.target)) {
           return;
         }
-
         setOpen(false);
       };
 
@@ -158,81 +138,97 @@ class MapWithAllMarker extends React.Component {
         prevOpen.current = open;
       }, [open]);
 
-      const handleHover = () => {};
-      const handleClick = () => {
-        console.log("Clicked on", this);
-        console.log("set again", )
-        // <Link to={'/site/'+site.id}/>
+
+      const handleMouseOver = (event) => {
+        var placeId = event.currentTarget.getAttribute("value");
+        // var action ={
+        //   type: 'ADD_PLACE',
+        //   data: {
+        //     site: site
+        //   }
+        // };
+        // this.props.dispatch(action);
+        console.log(placeId, 'id of place chosen');
       };
       return (
         <Paper className={classes.root}>
           <TableContainer className={classes.container}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
-                <Button
-                  ref={anchorRef}
-                  aria-controls={open ? "menu-list-grow" : undefined}
-                  aria-haspopup="true"
-                  onClick={handleToggle}
-                >
-                  Filter By:
-                </Button>
-                <Popper
-                  open={open}
-                  anchorEl={anchorRef.current}
-                  role={undefined}
-                  transition
-                  disablePortal
-                >
-                  {({ TransitionProps, placement }) => (
-                    <Grow
-                      {...TransitionProps}
-                      style={{
-                        transformOrigin:
-                          placement === "bottom"
-                            ? "center top"
-                            : "center bottom"
-                      }}
-                    >
-                      <Paper>
-                        <ClickAwayListener onClickAway={handleClose}>
-                          <MenuList
-                            autoFocusItem={open}
-                            id="menu-list-grow"
-                            onKeyDown={handleListKeyDown}
-                          >
-                            <MenuItem onClick={handleClose}>Địa Điểm Tổ Chức</MenuItem>
-                            <MenuItem onClick={handleClose}>Số Người Tham Gia</MenuItem>
-                            <MenuItem onClick={handleClose}>Ngày Tổ Chức</MenuItem>
-                          </MenuList>
-                        </ClickAwayListener>
-                      </Paper>
-                    </Grow>
-                  )}
-                </Popper>
+                <TableCell>
+                  <Link to="/create">
+                    <Button color="primary" background-color="primary">
+                      Tạo Sự Kiện Mới
+                    </Button>
+                  </Link>
+                </TableCell>
+                <TableCell>
+                  <Button
+                    ref={anchorRef}
+                    aria-controls={open ? "menu-list-grow" : undefined}
+                    aria-haspopup="true"
+                    onClick={handleToggle}
+                  >
+                    Filter By:
+                  </Button>
+                  <Popper
+                    open={open}
+                    anchorEl={anchorRef.current}
+                    role={undefined}
+                    transition
+                    disablePortal
+                  >
+                    {({ TransitionProps, placement }) => (
+                      <Grow
+                        {...TransitionProps}
+                        style={{
+                          transformOrigin:
+                            placement === "bottom"
+                              ? "center top"
+                              : "center bottom"
+                        }}
+                      >
+                        <Paper>
+                          <ClickAwayListener onClickAway={handleClose}>
+                            <MenuList
+                              autoFocusItem={open}
+                              id="menu-list-grow"
+                              onKeyDown={handleListKeyDown}
+                            >
+                              <MenuItem onClick={handleClose}>
+                                Địa Điểm Tổ Chức
+                              </MenuItem>
+                              <MenuItem onClick={handleClose}>
+                                Số Người Tham Gia
+                              </MenuItem>
+                              <MenuItem onClick={handleClose}>
+                                Ngày Tổ Chức
+                              </MenuItem>
+                            </MenuList>
+                          </ClickAwayListener>
+                        </Paper>
+                      </Grow>
+                    )}
+                  </Popper>
+                </TableCell>
               </TableHead>
               <Divider />
               <TableBody>
-                {this.state.dataApproval
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map(row => {
-
-                    return (
+                {this.state.dataApproval.map( row => {
+                  return (
+                    <Link to={`/site/${row.id}`}>
                       <TableRow
                         hover
                         role="checkbox"
                         tabIndex={-1}
                         key={row.id}
-                        onClick={handleClick}
+                        value={row.id}
+                        onMouseOver={handleMouseOver}
                       >
                         {this.state.columns.map(column => {
                           const value = row[column.field];
                           return (
-                            <TableCell
-                              key={column.field}
-                              align={column.align}
-                              onMouseOver={handleHover}
-                            >
+                            <TableCell key={column.field} align={column.align}>
                               {/*<img src='https://upload.wikimedia.org/wikipedia/commons/6/67/Firefox_Logo%2C_2017.svg'/>*/}
                               {column.format && typeof value === "number"
                                 ? column.format(value)
@@ -241,8 +237,9 @@ class MapWithAllMarker extends React.Component {
                           );
                         })}
                       </TableRow>
-                    );
-                  })}
+                    </Link>
+                  );
+                })}
               </TableBody>
             </Table>
           </TableContainer>
@@ -254,25 +251,41 @@ class MapWithAllMarker extends React.Component {
       this.state.dataApproval ? (
         <Grid container spacing={3}>
           <Grid item xs={3} style={{ height: "100vh" }}>
-            <AllSitesTable />
+            <AllSitesTable/>
           </Grid>
-          <Grid item xs={8} style={{ width: "100%", height: "100vh" }}>
+          <Grid item xs={1}>
+            {[
+              "https://vietnamsachvaxanh.org/wp-content/uploads/a1.-HCMC-US-Consulate-logo-high-ress.png",
+              "https://vietnamsachvaxanh.org/wp-content/uploads/a1.-SSISs.png",
+              "https://vietnamsachvaxanh.org/wp-content/uploads/Logo-WAVE.png",
+              "https://vietnamsachvaxanh.org/wp-content/uploads/aaAmChamss.png"
+            ].map((logo, index) => (
+              <Card key={index}>
+                <img style={{ width: 100, height: 100 }} src={logo} />
+              </Card>
+            ))}
+          </Grid>
+          <Grid item xs={7} style={{ width: "100%", height: "100vh" }}>
             <MapWrapped
               googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${API_KEY}`}
               loadingElement={<div style={{ height: `100%` }} />}
               containerElement={<div style={{ height: `100%` }} />}
               mapElement={<div style={{ height: `100%` }} />}
               props={this.props}
+
             />
           </Grid>
           <Grid item xs={1}>
-            <div style={{ textAlign: "center" }}>
-              <Link to="/create">
-                <Button color="primary" background-color="primary">
-                  Tạo Sự Kiện Mới
-                </Button>
-              </Link>
-            </div>
+            {[
+              "https://vietnamsachvaxanh.org/wp-content/uploads/vespa-adventures.png",
+              "https://vietnamsachvaxanh.org/wp-content/uploads/a2000px-Intel-logo.svgs_.png",
+              "https://vietnamsachvaxanh.org/wp-content/uploads/1.png",
+              "https://vietnamsachvaxanh.org/wp-content/uploads/heineken-vietnam-brewery-5a050226408b8.jpg"
+            ].map((logo, index) => (
+              <Card key={index}>
+                <img style={{ width: 110, height: 110 }} src={logo} />
+              </Card>
+            ))}
           </Grid>
         </Grid>
       ) : null
@@ -280,14 +293,13 @@ class MapWithAllMarker extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  // console.log(state);
+const mapStateToProps = (state) => {
+  console.log(state, 'state trong MapWithAllMarker');
+
   return {
     sites: state.firestore.ordered.sitesApproved,
-    sitesApproved: state.firestore.ordered.sitesApproved
-
-    // auth: state.firestore.auth,
-    // notifications: state.firestore.ordered.notifications
+    sitesApproved: state.firestore.ordered.sitesApproved,
+    // chosenPlaceId: state.site.id
   };
 };
 

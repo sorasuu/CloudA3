@@ -1,19 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import clsx from 'clsx'
+
 import SignedInLinks from './SignedInLinks'
 import SignedOutLinks from './SignedOutLinks'
 import { connect } from 'react-redux'
-import { makeStyles, useTheme, Drawer, AppBar, Toolbar, List, 
-        Typography, Divider, IconButton, ListItem, 
-        ListItemIcon, ListItemText } from '@material-ui/core'
-import MenuIcon from '@material-ui/icons/Menu'
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import { makeStyles, AppBar, Toolbar, Typography} from '@material-ui/core'
 
-const drawerWidth = 240;
 const useStyles = makeStyles(theme => ({
   appBar: {
     transition: theme.transitions.create(['margin', 'width'], {
