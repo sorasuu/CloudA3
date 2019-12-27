@@ -8,7 +8,7 @@ const createNotification = ((notification) => {
     .add(notification)
     .then(doc => console.log('notification added', doc));
 });
-const MY_SENDGRID_API_KEY="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"
+const MY_SENDGRID_API_KEY="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"
 sendgridemail.setApiKey(MY_SENDGRID_API_KEY);
 
 exports.siteCreated = functions.firestore

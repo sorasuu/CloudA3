@@ -31,3 +31,19 @@ export const editSite = (site) => {
     });
   }
 };
+<<<<<<< HEAD
+=======
+export const updateSite = (site) => {
+  return (dispatch, getState, {getFirestore}) => {
+    const firestore = getFirestore();
+
+    firestore.collection('sites').doc(site.id).update({
+      "siteClicked":site.isClicked
+    }).then(() => {
+      dispatch({ type: 'UPDATE_SITE_SUCCESS' });
+    }).catch(err => {
+      dispatch({ type: 'UPDATE_SITE_ERROR' }, err);
+    });
+  }
+};
+>>>>>>> e346a0d61f03bd6be9837a27d89d005ab05b1d82

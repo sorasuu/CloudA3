@@ -77,9 +77,17 @@ class MapWithAllMarker extends React.Component {
         // { title: 'Ngày Kết Thúc', field: 'endDate' },
       ],
       dataApproval: [],
+<<<<<<< HEAD
 
+=======
+      currentMarker:'',
+>>>>>>> e346a0d61f03bd6be9837a27d89d005ab05b1d82
     };
   }
+  updateShared(shared_value) {
+    this.setState({currentMarker: shared_value});
+}
+
   UNSAFE_componentWillReceiveProps(nextProps) {
     const sitesApprove = [];
     if (nextProps.sitesApproved) {
@@ -138,6 +146,7 @@ class MapWithAllMarker extends React.Component {
         prevOpen.current = open;
       }, [open]);
 
+<<<<<<< HEAD
 
       const handleMouseOver = (event) => {
         var placeId = event.currentTarget.getAttribute("value");
@@ -149,6 +158,13 @@ class MapWithAllMarker extends React.Component {
         // };
         // this.props.dispatch(action);
         console.log(placeId, 'id of place chosen');
+=======
+      const handleHover = () => {};
+      const handleClick = (id) => {
+        console.log("Clicked on", id);
+        console.log("set again", )
+        // <Link to={'/site/'+site.id}/>
+>>>>>>> e346a0d61f03bd6be9837a27d89d005ab05b1d82
       };
       return (
         <Paper className={classes.root}>
@@ -222,8 +238,13 @@ class MapWithAllMarker extends React.Component {
                         role="checkbox"
                         tabIndex={-1}
                         key={row.id}
+<<<<<<< HEAD
                         value={row.id}
                         onMouseOver={handleMouseOver}
+=======
+                        onClick={handleClick(row.id)}
+                        currentMarker={this.state.currentMarker}
+>>>>>>> e346a0d61f03bd6be9837a27d89d005ab05b1d82
                       >
                         {this.state.columns.map(column => {
                           const value = row[column.field];
@@ -272,7 +293,11 @@ class MapWithAllMarker extends React.Component {
               containerElement={<div style={{ height: `100%` }} />}
               mapElement={<div style={{ height: `100%` }} />}
               props={this.props}
+<<<<<<< HEAD
 
+=======
+              currentMarker={this.state.currentMarker}
+>>>>>>> e346a0d61f03bd6be9837a27d89d005ab05b1d82
             />
           </Grid>
           <Grid item xs={1}>
