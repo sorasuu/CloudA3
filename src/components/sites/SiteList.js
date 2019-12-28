@@ -14,6 +14,6 @@ const SiteList = ({sites}) => {
       })}  
     </div>
   )
-}
+};
 
 export default SiteList

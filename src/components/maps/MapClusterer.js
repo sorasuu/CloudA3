@@ -58,7 +58,7 @@ function MapClusterer(props) {
                     scaledSize: new window.google.maps.Size(40, 40),
                   }}
               >
-                {isOpen && (
+                {selectedPlace && isOpen && (
                     <InfoWindow
                         onCloseClick={() => {
                           setOpenInfo(false);

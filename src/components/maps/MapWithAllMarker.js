@@ -24,7 +24,6 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
 
 const API_KEY = "AIzaSyCukFLNeMl4inkvLQ8ZNNQzbC3q1zmcibI";
 
@@ -71,10 +70,8 @@ class MapWithAllMarker extends React.Component {
     super(props);
     this.state = {
       columns: [
-        { title: "Tiêu Đề", field: "name" },
-        // { title: 'Địa Điểm', field: 'address' },
+        { title: "Tiêu Đề", field: "name" , phoneNumber: ''},
         { title: "Ảnh Đại Diện", field: "avatar" }
-        // { title: 'Ngày Kết Thúc', field: 'endDate' },
       ],
       dataApproval: [],
       currentMarker:'',
@@ -107,8 +104,6 @@ class MapWithAllMarker extends React.Component {
   }
 
   render() {
-    console.log(this.props, "All Marker Props");
-
     const AllSitesTable = () => {
       const { classes } = this.props;
       console.log(this.props, 'this props trong allsitestable');
@@ -145,14 +140,9 @@ class MapWithAllMarker extends React.Component {
 
       const handleMouseOver = (event) => {
         var placeId = event.currentTarget.getAttribute("value");
-        // var action ={
-        //   type: 'ADD_PLACE',
-        //   data: {
-        //     site: site
-        //   }
-        // };
-        // this.props.dispatch(action);
+        console.log(this.props,'handleMouseOver');
         console.log(placeId, 'id of place chosen');
+
       };
       return (
         <Paper className={classes.root}>
@@ -218,9 +208,10 @@ class MapWithAllMarker extends React.Component {
               </TableHead>
               <Divider />
               <TableBody>
-                {this.state.dataApproval.map( row => {
+                {this.state.dataApproval.map( (row, index) => {
+                  // console.log(row,'row info');
                   return (
-                    <Link to={`/site/${row.id}`}>
+                    <Link to={`/site/${row.id}`} key={index}>
                       <TableRow
                         hover
                         role="checkbox"
@@ -228,7 +219,6 @@ class MapWithAllMarker extends React.Component {
                         key={row.id}
                         value={row.id}
                         onMouseOver={handleMouseOver}
-                        // onClick={handleClick(row.id)}
                         currentMarker={this.state.currentMarker}
                       >
                         {this.state.columns.map(column => {

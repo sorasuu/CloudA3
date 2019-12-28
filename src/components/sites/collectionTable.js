@@ -13,7 +13,8 @@ const TAX_RATE = 0.07;
 const useStyles = makeStyles({
     table: {
         minWidth: 700,
-    },
+    }
+
 });
 
 function ccyFormat(num) {
@@ -34,9 +35,9 @@ function subtotal(items) {
 }
 
 const rows = [
-    createRow('Paperclips (Box)', 100, 1.15),
-    createRow('Paper (Case)', 10, 45.99),
-    createRow('Waste Basket', 2, 17.99),
+    createRow('(Box)', 100, 1.15),
+    createRow('(Case)', 10, 45.99),
+    createRow('Waste', 2, 17.99),
 ];
 
 const invoiceSubtotal = subtotal(rows);
@@ -52,7 +53,7 @@ function CollectionTable(props){
             <Table className={classes.table} aria-label="spanning table">
                 <TableHead>
                     <TableRow>
-                        <TableCell align="center" colSpan={3}>
+                        <TableCell align="center" colSpan={2}>
                             Details
                         </TableCell>
                         <TableCell align="right">Price</TableCell>
