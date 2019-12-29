@@ -3,14 +3,9 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-
 import DatePicker from "react-datepicker";
 import {Checkbox} from "@material-ui/core";
 import {createVolunteer} from "../../store/actions/voluteerAction";
-import {editSite} from "../../store/actions/siteActions";
-import {compose} from "redux";
-import {connect} from "react-redux";
-import {firestoreConnect} from "react-redux-firebase";
 
 function FormError(props) {
     if (props.isHidden) {
@@ -28,11 +23,9 @@ export default function VolunteerForm(site) {
     const handleClickOpen = () => {
         setOpen(true);
     };
-
     const handleClose = () => {
         setOpen(false);
     };
-
     const handleBuyShirt=()=> {
         setBuyShirt(!isBuyShirt);
     };

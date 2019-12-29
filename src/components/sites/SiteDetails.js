@@ -255,6 +255,7 @@ class SiteDetails extends React.Component {
                 ) : null}
               </Grid>
             </Grid>
+            <h5 style={{textAlign:"center"}}>Collection Table</h5>
             <CollectionTable props={this.props} />
           </div>
         </div>
