@@ -9,36 +9,18 @@ import CollectionTable from "./collectionTable";
 import { Grid, Divider, Button } from "@material-ui/core";
 import Dropzone from "react-dropzone-uploader";
 import "react-dropzone-uploader/dist/styles.css";
-import {
-  withScriptjs,
-  withGoogleMap
-} from "react-google-maps";
+import { withScriptjs, withGoogleMap } from "react-google-maps";
 import MaterialTable from "material-table";
 import * as XLSX from "xlsx";
 import * as FileSaver from "file-saver";
 import { createVolunteer } from "../../store/actions/voluteerAction";
 import { editSite } from "../../store/actions/siteActions";
 import ToolRequest from "./toolRequestForm";
+import AgendaTable from "./AgendaTable";
 
 const API_KEY = "AIzaSyCukFLNeMl4inkvLQ8ZNNQzbC3q1zmcibI";
 
 const MapWrapped = withScriptjs(withGoogleMap(MapMarker));
-
-function FormError(props) {
-  if (props.isHidden) {
-    return null;
-  }
-  return <div className="form-warning">{props.errorMessage}</div>;
-}
-const validateInput = checkingText => {
-  const regexp = /^[a-zA-Z]+$/;
-  const checkingResult = regexp.exec(checkingText);
-  if (checkingResult !== null) {
-    return { isInputValid: true, errorMessage: "" };
-  } else {
-    return { isInputValid: false, errorMessage: "Error " };
-  }
-};
 
 const ImageAudioVideo = () => {
   const getUploadParams = ({ meta }) => {
@@ -80,12 +62,18 @@ const ImageAudioVideo = () => {
 class SiteDetails extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
+      agendaColumns:[
+        {title:"Date", field: 'date', type: 'date'},
+        {title:"Activity", field: 'activity', type:'text'}
+      ],
       columns: [
         { title: "Name", field: "name" },
         { title: "SDT", field: "phoneNumber", type: "numeric" },
         { title: "Email", field: "email" }
       ],
+      agendaData:[],
       volunteers: [],
       phoneNumber: "",
       volunteerNum: "",
@@ -129,6 +117,8 @@ class SiteDetails extends React.Component {
 
   render() {
     const { site } = this.props;
+    console.log(this.props, 'site details props');
+
     const VolunteerTable = () => {
       return (
         <MaterialTable
@@ -136,32 +126,35 @@ class SiteDetails extends React.Component {
           // style={{width:'100%', height:'80vh'}}
           columns={this.state.columns}
           data={this.state.volunteers}
-          editable={{
-            onRowUpdate: (newData, oldData) =>
-              new Promise(resolve => {
-                setTimeout(() => {
-                  resolve();
-                  if (oldData) {
+          editable={
+            // this.state.owner &&
+            {
+              onRowUpdate: (newData, oldData) =>
+                new Promise(resolve => {
+                  setTimeout(() => {
+                    resolve();
+                    if (oldData) {
+                      this.setState(prevState => {
+                        const volunteers = [...prevState.volunteers];
+                        volunteers[volunteers.indexOf(oldData)] = newData;
+                        return { ...prevState, volunteers };
+                      });
+                    }
+                  }, 600);
+                }),
+              onRowDelete: oldData =>
+                new Promise(resolve => {
+                  setTimeout(() => {
+                    resolve();
                     this.setState(prevState => {
                       const volunteers = [...prevState.volunteers];
-                      volunteers[volunteers.indexOf(oldData)] = newData;
+                      volunteers.splice(volunteers.indexOf(oldData), 1);
                       return { ...prevState, volunteers };
                     });
-                  }
-                }, 600);
-              }),
-            onRowDelete: oldData =>
-              new Promise(resolve => {
-                setTimeout(() => {
-                  resolve();
-                  this.setState(prevState => {
-                    const volunteers = [...prevState.volunteers];
-                    volunteers.splice(volunteers.indexOf(oldData), 1);
-                    return { ...prevState, volunteers };
-                  });
-                }, 600);
-              })
-          }}
+                  }, 600);
+                })
+            }
+          }
         />
       );
     };
@@ -223,26 +216,32 @@ class SiteDetails extends React.Component {
                     mapElement={<div style={{ height: `100%` }} />}
                     site={site}
                   />
-                  <div style={{textAlign:'center', marginTop:10}}>{this.state.owner ? null : <VolunteerForm site={site} />}</div>
+                  <div style={{ textAlign: "center", marginTop: 10 }}>
+                    {this.state.owner ? null : <VolunteerForm site={site} />}
+                  </div>
                 </Grid>
               </Grid>
             </div>
-
-
+            <h5>Agenda</h5>
+            <AgendaTable/>
             <Grid container spacing={3}>
+
               <Grid item xs={6}>
+
                 <VolunteerTable />
                 <div className="row">
                   <div className="col xs=6 md=6 lg=6">
-                  <Button variant="outlined" color="primary" onClick={e => this.handleDownloadExcel(e)}>
-                    Download Excel
-                  </Button>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={e => this.handleDownloadExcel(e)}
+                    >
+                      Download Excel
+                    </Button>
                   </div>
                   <div className="col xs=6 md=6 lg=6">
-                    <ToolRequest/>
+                    <ToolRequest />
                   </div>
-
-
                 </div>
               </Grid>
               <Grid item xs={6}>
@@ -255,7 +254,7 @@ class SiteDetails extends React.Component {
                 ) : null}
               </Grid>
             </Grid>
-            <h5 style={{textAlign:"center"}}>Collection Table</h5>
+            <h5 style={{ textAlign: "center" }}>Collection Table</h5>
             <CollectionTable props={this.props} />
           </div>
         </div>
@@ -271,7 +270,6 @@ class SiteDetails extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-
   const id = ownProps.match.params.id;
   const sites = state.firestore.data.sites;
   const site = sites ? sites[id] : null;

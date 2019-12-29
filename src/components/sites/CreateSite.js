@@ -131,7 +131,6 @@ class CreateSite extends Component {
               center = {{lat: 10.7296192, lng: 106.6943174}}
               height ='300px'
               zoom={15}
-              // locationFromChild = {this.callbackfromchild}
             />
         
           <div className="input-field">
