@@ -21,7 +21,7 @@ const MapWithASearchBox = compose(
     withProps(),
     lifecycle({
         componentWillMount() {
-            const refs = {}
+            const refs = {};
             this.setState({
                 bounds: null,
                 center: {

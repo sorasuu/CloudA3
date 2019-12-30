@@ -7,32 +7,16 @@ import {
 import {Link} from 'react-router-dom'
 
 function MapClusterer(props) {
-  // console.log(currentId, 'current marker ne');
-  const [selectedPlace, setSelectedPlace] = useState(null);
+  console.log(props)
   const [isOpen, setOpenInfo] = useState(false);
+  const [markerIndex, setMarkerIndex] = useState(0);
   const { MarkerClusterer } = require("react-google-maps/lib/components/addons/MarkerClusterer");
-  // console.log(selectedPlace, 'selectedPlace');
-  // console.log(props.props.sitesApproved, 'props');
-  console.log(props.currentId);
-      // window.google.maps.Animation.BOUNCE;
-  useEffect(() => {
-    const listener = e => {
-      if (e.key === "Escape") {
-        setSelectedPlace(null)
-      }
-    };
-    window.addEventListener("keydown", listener);
 
-    return () => {
-      window.removeEventListener("keydown", listener);
-    };
-  }, []);
-  const handleClick = () => {
-    setOpenInfo(true)
+  const handleClick = (site,index) => {
+    setOpenInfo(true);
+    setMarkerIndex(index);
   };
-  const handleMouseOver = (site) => {
-    setSelectedPlace(site)
-  };
+
 
   return (
       <GoogleMap
@@ -44,24 +28,25 @@ function MapClusterer(props) {
             enableRetinaIcons
             gridSize={40}
         >
-          {props.props.sites ? props.props.sites.map(site => (
+          {props.props.sites ? props.props.sites.map((site, index) => (
               <Marker
                   key={site.id}
+
                   position={{
                     lat: parseFloat(site.location.lat),
                     lng: parseFloat(site.location.lng)
                   }}
-                  onClick={()=>handleClick(site)}
-                  onMouseOver={() => handleMouseOver(site)}
+                  onMouseOver={()=>handleClick(site, index)}
+
                   animation = {site.id === props.currentId ? window.google.maps.Animation.BOUNCE : null}
                   icon={{
                     url:'https://upload.wikimedia.org/wikipedia/commons/d/d7/Android_robot.svg',
                     scaledSize: new window.google.maps.Size(40, 40),
                   }}
               >
-                {selectedPlace && isOpen && (
+                {isOpen && markerIndex === index && (
                     <InfoWindow
-                        onCloseClick={() => {
+                        onMouseOut={() => {
                           setOpenInfo(false);
                         }}
                     >

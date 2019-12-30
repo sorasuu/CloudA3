@@ -122,7 +122,6 @@ class MapWithAllMarker extends React.Component {
     const AllSitesTable = () => {
       const { classes } = this.props;
       console.log(this.props, 'this props trong allsitestable');
-      // const choseId = this.props.chosenPlaceId;
       const [open, setOpen] = React.useState(false);
       const anchorRef = React.useRef(null);
       const handleToggle = () => {
@@ -156,10 +155,10 @@ class MapWithAllMarker extends React.Component {
       const handleMouseOver = (event) => {
         this.setState({currentId: event.currentTarget.getAttribute("value")})
       };
-      const handleMouseOut = (event) => {
-        console.log( event,'alalalla');
-        this.setState({currentId: null})
+      const handleMouseOut = () => {
+        this.setState({currentId: '1'})
       };
+
       return (
         <Paper className={classes.root}>
           <TableContainer className={classes.container}>
@@ -242,7 +241,6 @@ class MapWithAllMarker extends React.Component {
                             <Avatar src={row.avatar}/>
                           </TableCell>
 
-                        
                       </TableRow>
                     </Link>
                   );
