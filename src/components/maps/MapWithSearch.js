@@ -70,9 +70,9 @@ const MapWithASearchBox = compose(
                     const location ={
                         lat:places[0].geometry.location.lat(),
                         lng:places[0].geometry.location.lng(),
-                    }
-                    localStorage.setItem('lat', location.lat)
-                    localStorage.setItem('lng',location.lng)
+                    };
+                    localStorage.setItem('lat', location.lat);
+                    localStorage.setItem('lng',location.lng);
                     localStorage.setItem('address', places[0].formatted_address)
                 },
             })
@@ -108,6 +108,8 @@ const MapWithASearchBox = compose(
                     fontSize: `14px`,
                     outline: `none`,
                     textOverflow: `ellipses`,
+                    backgroundColor:'white',
+
                 }}
             />
         </SearchBox>

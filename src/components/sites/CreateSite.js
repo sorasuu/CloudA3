@@ -5,7 +5,8 @@ import { Redirect } from 'react-router-dom'
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css"
 import MapWithSearch from '../maps/MapWithSearch'
-
+import Dropzone from 'react-dropzone-uploader'
+import {Grid} from '@material-ui/core'
 function FormError(props){
   if (props.isHidden){return null;}
   return(
@@ -25,6 +26,39 @@ const validateInput = (checkingText) =>{
     errorMessage: 'Error '}
   }
 };
+
+const ImageAudioVideo = () => {
+  const getUploadParams = ({ meta }) => {
+    const url = 'https://httpbin.org/post'
+    return { url, meta: { fileUrl: `${url}/${encodeURIComponent(meta.name)}` } }
+  };
+
+  const handleChangeStatus = ({ meta }, status) => {
+    console.log(status, meta)
+  };
+
+  const handleSubmit = (files, allFiles) => {
+    console.log(files.map(f => f.meta));
+    allFiles.forEach(f => f.remove())
+  };
+
+  return (
+      <Dropzone
+          getUploadParams={getUploadParams}
+          onChangeStatus={handleChangeStatus}
+          // onSubmit={handleSubmit}
+          accept="image/*"
+          maxFiles={1}
+          inputContent={(files, extra) => (extra.reject ? 'Image file only' : 'Upload Logo of Organization' )}
+          styles={{
+            dropzoneReject: { borderColor: 'red', backgroundColor: '#DAA' },
+            inputLabel: (files, extra) => (extra.reject ? { color: 'red' } : {}),
+          }}
+      />
+  )
+};
+
+
 
 class CreateSite extends Component {
 
@@ -76,14 +110,21 @@ class CreateSite extends Component {
             <input type="text" id='title' onChange={this.handleChange} required />
             <label htmlFor="title">Tiêu Đề Sự Kiện</label>
             <FormError type="title" isHidden={this.state.isInputValid} errorMessage={this.state.errorMessage}/>
-
           </div>
           <div className="input-field">
             <textarea id="content" className="materialize-textarea" onChange={this.handleChange} required></textarea>
             <label htmlFor="content">Nội Dung Sự Kiện</label>
             <FormError type="title" isHidden={this.state.isInputValid} errorMessage={this.state.errorMessage}/>
-
           </div>
+          <div className="input-field">
+            <textarea id="content" className="materialize-textarea" onChange={this.handleChange} required></textarea>
+            <label htmlFor="organization">Tổ Chức Thành Lập Sự Kiện</label>
+            <FormError type="title" isHidden={this.state.isInputValid} errorMessage={this.state.errorMessage}/>
+          </div>
+          <Grid container spacing={3}>
+            <Grid item xs={6}><ImageAudioVideo /></Grid>
+          </Grid>
+
           <div className="input-field">
             <input type="text" id='phoneNumber' onChange={this.handleChange} required />
             <label htmlFor="title">Số Điện Thoại Liên Hệ</label>
@@ -92,7 +133,7 @@ class CreateSite extends Component {
           </div>
           
           <div className="row">
-            <div className="col xs=6 sm=6 md=6">Ngày Hoat Dong :
+            <div className="col xs=6 sm=6 md=6">Ngày Sự Kiện Diễn Ra :
               <DatePicker
                 selected={this.state.date}
                 onChange={this.handleChangeDate}
@@ -125,12 +166,12 @@ const mapStateToProps = (state) => {
   return {
     auth: state.firebase.auth
   }
-}
+};
 
 const mapDispatchToProps = dispatch => {
   return {
     createSite: (site) => dispatch(createSite(site)),
   }
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateSite)

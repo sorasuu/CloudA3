@@ -7,21 +7,29 @@ import {
 import {Link} from 'react-router-dom'
 
 function MapClusterer(props) {
-  console.log(props)
+  // console.log(props);
   const [isOpen, setOpenInfo] = useState(false);
   const [markerIndex, setMarkerIndex] = useState(0);
   const { MarkerClusterer } = require("react-google-maps/lib/components/addons/MarkerClusterer");
-
+  const [center, setCenter] = useState({
+    lat: 10.7292764, lng: 106.696505
+  });
   const handleClick = (site,index) => {
     setOpenInfo(true);
     setMarkerIndex(index);
+    // setCenter(
+    //     {
+    //       lat: parseFloat(site.location.lat),
+    //       lng: parseFloat(site.location.lng)
+    //     }
+    // )
   };
-
 
   return (
       <GoogleMap
           defaultZoom={10}
-          defaultCenter={{ lat: 10.7296192, lng: 106.6943174 }}
+          center={center}
+          // onBoundsChanged={}
       >
         <MarkerClusterer
             averageCenter
@@ -31,13 +39,11 @@ function MapClusterer(props) {
           {props.props.sites ? props.props.sites.map((site, index) => (
               <Marker
                   key={site.id}
-
                   position={{
                     lat: parseFloat(site.location.lat),
                     lng: parseFloat(site.location.lng)
                   }}
                   onMouseOver={()=>handleClick(site, index)}
-
                   animation = {site.id === props.currentId ? window.google.maps.Animation.BOUNCE : null}
                   icon={{
                     url:'https://upload.wikimedia.org/wikipedia/commons/d/d7/Android_robot.svg',
@@ -46,7 +52,7 @@ function MapClusterer(props) {
               >
                 {isOpen && markerIndex === index && (
                     <InfoWindow
-                        onMouseOut={() => {
+                        onMouseLeave={() => {
                           setOpenInfo(false);
                         }}
                     >

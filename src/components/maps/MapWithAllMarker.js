@@ -108,10 +108,9 @@ class MapWithAllMarker extends React.Component {
           endDate: Date(siteApproved.endDate),
           id: siteApproved.id
         };
-        // console.log(data.startDate, "startDate");
         sitesApprove.push(data);
       });
-      console.log(sitesApprove, "data approval");
+      // console.log(sitesApprove, "data approval");
       this.setState({
         dataApproval: sitesApprove
       });
@@ -121,7 +120,6 @@ class MapWithAllMarker extends React.Component {
   render() {
     const AllSitesTable = () => {
       const { classes } = this.props;
-      console.log(this.props, 'this props trong allsitestable');
       const [open, setOpen] = React.useState(false);
       const anchorRef = React.useRef(null);
       const handleToggle = () => {
@@ -154,9 +152,6 @@ class MapWithAllMarker extends React.Component {
 
       const handleMouseOver = (event) => {
         this.setState({currentId: event.currentTarget.getAttribute("value")})
-      };
-      const handleMouseOut = () => {
-        this.setState({currentId: '1'})
       };
 
       return (
@@ -223,6 +218,7 @@ class MapWithAllMarker extends React.Component {
               <Divider />
               <TableBody>
                 {this.state.dataApproval.map( (row, index) => {
+                  // console.log(row, 'row trong data');
                   return (
                     <Link to={`/site/${row.id}`} key={index}>
                       <TableRow
@@ -231,7 +227,7 @@ class MapWithAllMarker extends React.Component {
                         key={row.id}
                         value={row.id}
                         onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
+
                       >
                           <TableCell>
                             <h5>{row.name}</h5>
@@ -251,7 +247,6 @@ class MapWithAllMarker extends React.Component {
         </Paper>
       );
     };
-    console.log(this.state.currentId, 'current id ne');
     return (
       // <Grid container spacing={3}>
       this.state.dataApproval ? (
@@ -300,7 +295,6 @@ class MapWithAllMarker extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state, 'state trong MapWithAllMarker');
 
   return {
     sites: state.firestore.ordered.sitesApproved,
