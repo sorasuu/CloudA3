@@ -7,12 +7,13 @@ import {
 import {Link} from 'react-router-dom'
 
 function MapClusterer(props) {
-
+  // console.log(currentId, 'current marker ne');
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [isOpen, setOpenInfo] = useState(false);
   const { MarkerClusterer } = require("react-google-maps/lib/components/addons/MarkerClusterer");
-  console.log(selectedPlace, 'selectedPlace');
-  console.log(props.props.sitesApproved, 'props');
+  // console.log(selectedPlace, 'selectedPlace');
+  // console.log(props.props.sitesApproved, 'props');
+  console.log(props.currentId);
       // window.google.maps.Animation.BOUNCE;
   useEffect(() => {
     const listener = e => {
@@ -52,7 +53,7 @@ function MapClusterer(props) {
                   }}
                   onClick={()=>handleClick(site)}
                   onMouseOver={() => handleMouseOver(site)}
-                  animation = {site === selectedPlace ? window.google.maps.Animation.BOUNCE : null}
+                  animation = {site.id === props.currentId ? window.google.maps.Animation.BOUNCE : null}
                   icon={{
                     url:'https://upload.wikimedia.org/wikipedia/commons/d/d7/Android_robot.svg',
                     scaledSize: new window.google.maps.Size(40, 40),

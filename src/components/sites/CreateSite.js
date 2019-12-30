@@ -33,13 +33,11 @@ class CreateSite extends Component {
     content: '',
     address: '',
     phoneNumber:'',
-    startDate: new Date(),
-    endDate: new Date(),
+    date: new Date(),
     location:{
       lat:'',
       lng:''
     },
-    showMap: false,
     confirm: false,
     pending: true,
   };
@@ -59,15 +57,8 @@ class CreateSite extends Component {
     this.props.history.push('/');
     localStorage.clear();
   };
-  handleChangeStart = date => {
-    this.setState({
-      startDate: date
-    });
-  };
-  handleChangeEnd = date => {
-    this.setState({
-      endDate: date
-    });
+  handleChangeDate = e => {
+    this.setState({date: e});
   };
 
   handleShowMap(){
@@ -101,27 +92,15 @@ class CreateSite extends Component {
           </div>
           
           <div className="row">
-            <div className="col xs=6 sm=6 md=6">Ngày Bắt Đầu :
+            <div className="col xs=6 sm=6 md=6">Ngày Hoat Dong :
               <DatePicker
-                selected={this.state.startDate}
-                onChange={this.handleChangeStart}
+                selected={this.state.date}
+                onChange={this.handleChangeDate}
                 showTimeSelect
                 timeFormat="HH:mm"
                 timeInterval={15}
                 timeCaption = "time"
-                dateFormat="d MMMM, yyyy h:mm aa"
-              />
-            </div>
-            <div className="col xs=6 sm=6 md=6">
-              Ngày Kết Thúc :
-              <DatePicker
-                selected={this.state.endDate}
-                onChange={this.handleChangeEnd}
-                showTimeSelect
-                timeFormat="HH:mm"
-                timeInterval={15}
-                timeCaption = "time"
-                dateFormat="d MMMM, yyyy h:mm aa"
+                dateFormat="d-MM-yyyy h:mm aa"
               />
             </div>
           </div>

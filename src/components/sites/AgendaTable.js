@@ -42,9 +42,9 @@ function add(date, activity){
 }
 
 const rows = [
-    createData('21/12/2019', 'start Date'),
+    createData('21/12/2019', 'Event Begin'),
     activities,
-    createData('26/12/2019', 'end Date'),
+
 ];
 
 const useStyles = makeStyles({

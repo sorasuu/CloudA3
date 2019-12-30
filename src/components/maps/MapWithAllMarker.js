@@ -10,9 +10,10 @@ import {
   Popper,
   Divider,
   ClickAwayListener,
-  Grow
+  Grow,
+  Avatar,
+  Card,
 } from "@material-ui/core";
-import Card from "@material-ui/core/Card";
 import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import { firestoreConnect } from "react-redux-firebase";
@@ -24,6 +25,9 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
+// import MoreVertIcon from '@material-ui/icons/MoreVert';
+import FilterListIcon from '@material-ui/icons/FilterList';
+
 
 const API_KEY = "AIzaSyCukFLNeMl4inkvLQ8ZNNQzbC3q1zmcibI";
 
@@ -32,6 +36,10 @@ const MapWrapped = withScriptjs(withGoogleMap(MapClusterer));
 const useStyles = theme => ({
   card: {
     display: "flex"
+  },
+  media:{
+    height:0,
+    paddingTop: '56.25%',
   },
   details: {
     display: "flex",
@@ -53,6 +61,11 @@ const useStyles = theme => ({
     height: 38,
     width: 38
   },
+  sizeAvatar:{
+    width: '100%',
+    height: '100%'
+
+  },
 
   root: {
     flexGrow: 1,
@@ -71,13 +84,15 @@ class MapWithAllMarker extends React.Component {
     this.state = {
       columns: [
         { title: "Tiêu Đề", field: "name" , phoneNumber: ''},
-        { title: "Ảnh Đại Diện", field: "avatar" }
+        { title: "Ảnh Đại Diện", field: "avatar" },
+        { title: "Event Date", field: 'startDate'},
+        { title: 'address', field: 'address'}
       ],
       dataApproval: [],
-      currentMarker:'',
-
+      currentId: '',
     };
   }
+
   updateShared(shared_value) {
     this.setState({currentMarker: shared_value});
 }
@@ -102,7 +117,7 @@ class MapWithAllMarker extends React.Component {
       });
     }
   }
-
+  
   render() {
     const AllSitesTable = () => {
       const { classes } = this.props;
@@ -139,10 +154,11 @@ class MapWithAllMarker extends React.Component {
       }, [open]);
 
       const handleMouseOver = (event) => {
-        var placeId = event.currentTarget.getAttribute("value");
-        console.log(this.props,'handleMouseOver');
-        console.log(placeId, 'id of place chosen');
-
+        this.setState({currentId: event.currentTarget.getAttribute("value")})
+      };
+      const handleMouseOut = (event) => {
+        console.log( event,'alalalla');
+        this.setState({currentId: null})
       };
       return (
         <Paper className={classes.root}>
@@ -157,14 +173,13 @@ class MapWithAllMarker extends React.Component {
                   </Link>
                 </TableCell>
                 <TableCell>
-                  <Button
-                    ref={anchorRef}
-                    aria-controls={open ? "menu-list-grow" : undefined}
-                    aria-haspopup="true"
-                    onClick={handleToggle}
-                  >
-                    Filter By:
-                  </Button>
+
+                   <FilterListIcon
+                       ref={anchorRef}
+                       aria-controls={open ? "menu-list-grow" : undefined}
+                       aria-haspopup="true"
+                       onClick={handleToggle}/>
+
                   <Popper
                     open={open}
                     anchorEl={anchorRef.current}
@@ -209,29 +224,25 @@ class MapWithAllMarker extends React.Component {
               <Divider />
               <TableBody>
                 {this.state.dataApproval.map( (row, index) => {
-                  // console.log(row,'row info');
                   return (
                     <Link to={`/site/${row.id}`} key={index}>
                       <TableRow
                         hover
-                        role="checkbox"
                         tabIndex={-1}
                         key={row.id}
                         value={row.id}
                         onMouseOver={handleMouseOver}
-                        currentMarker={this.state.currentMarker}
+                        onMouseOut={handleMouseOut}
                       >
-                        {this.state.columns.map(column => {
-                          const value = row[column.field];
-                          return (
-                            <TableCell key={column.field} align={column.align}>
-                              {/*<img src='https://upload.wikimedia.org/wikipedia/commons/6/67/Firefox_Logo%2C_2017.svg'/>*/}
-                              {column.format && typeof value === "number"
-                                ? column.format(value)
-                                : value}
-                            </TableCell>
-                          );
-                        })}
+                          <TableCell>
+                            <h5>{row.name}</h5>
+                            <div>{row.address}</div>
+                          </TableCell>
+                          <TableCell>
+                            <Avatar src={row.avatar}/>
+                          </TableCell>
+
+                        
                       </TableRow>
                     </Link>
                   );
@@ -242,6 +253,7 @@ class MapWithAllMarker extends React.Component {
         </Paper>
       );
     };
+    console.log(this.state.currentId, 'current id ne');
     return (
       // <Grid container spacing={3}>
       this.state.dataApproval ? (
@@ -268,7 +280,7 @@ class MapWithAllMarker extends React.Component {
               containerElement={<div style={{ height: `100%` }} />}
               mapElement={<div style={{ height: `100%` }} />}
               props={this.props}
-              currentMarker={this.state.currentMarker}
+              currentId={this.state.currentId}
             />
           </Grid>
           <Grid item xs={1}>

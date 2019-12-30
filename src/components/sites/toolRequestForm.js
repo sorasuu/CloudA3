@@ -25,7 +25,10 @@ const validateInput = checkingText => {
 
 export default function ToolRequest() {
     const [open, setOpen] = React.useState(false);
-
+    const [shirt, setShirt] = React.useState(0);
+    const [tong, setTong] = React.useState(0);
+    const [gloves, setGloves] = React.useState(0);
+    const [bag, setBag] = React.useState(0);
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -34,26 +37,70 @@ export default function ToolRequest() {
         setOpen(false);
     };
 
+    const handleChange = e => {
+        this.setState({
+            [e.target.id]: e.target.value
+        });
+    };
+
+    const handleSubmit = e => {
+        e.preventDefault();
+        // console.log(this.state);
+        const ToolRequest = {
+
+        };
+        // this.props.createVolunteer(volunteer);
+        this.props.history.push("/");
+    };
     return (
         <div>
             <Button variant="outlined" color="primary" onClick={handleClickOpen}>
                Send Tools Request
             </Button>
-            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" style={{minWidth:300}}>
+                <DialogTitle id="form-dialog-title">Tool Request</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>
-                        To subscribe to this website, please enter your email address here. We will send updates
-                        occasionally.
-                    </DialogContentText>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Email Address"
-                        type="email"
-                        fullWidth
-                    />
+                    <form className="white" onSubmit={handleSubmit}>
+                        <div>Shirt</div>
+                        <div className="input-field">
+                            <input
+                                type="numeric"
+                                id="shirt"
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+
+                        <div>Tong</div>
+                        <div className="input-field">
+                            <input
+                                type="numeric"
+                                id="tong"
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+
+                        <div>Gloves</div>
+                        <div className="input-field">
+                            <input
+                                type="numeric"
+                                id="gloves"
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+
+                        <div>Bags</div>
+                        <div className="input-field">
+                            <input
+                                type="numeric"
+                                id="bag"
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                    </form>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
