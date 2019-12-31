@@ -199,7 +199,12 @@ class MapWithAllMarker extends React.Component {
                               onKeyDown={handleListKeyDown}
                             >
                               <MenuItem onClick={handleClose}>
-                                Địa Điểm Tổ Chức
+                                Đ21/12/2019	Event Begin
+
+Danh Sách Tham Gia
+No records to display
+1-0 of 0
+Upload Event Photos & Videos ịa Điểm Tổ Chức
                               </MenuItem>
                               <MenuItem onClick={handleClose}>
                                 Số Người Tham Gia

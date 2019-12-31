@@ -106,16 +106,17 @@ export default function AgendaTable() {
                         <div className={"input-field"}>
 
                                 <div>
-                                    Date & Time (d MM, yyyy h:mm aa):
+                                    Selection Time (h:mm aa):
                                 </div>
                                     <DatePicker
                                         selected={date}
                                         onChange={handleChangeDate}
                                         showTimeSelect
+                                        showTimeSelectOnly
                                         timeFormat="HH:mm"
                                         timeInterval={15}
                                         timeCaption = "time"
-                                        dateFormat="d MM, yyyy h:mm aa"
+                                        dateFormat="h:mm a a"
                                     />
 
                                     <p>Activity</p>
