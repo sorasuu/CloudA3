@@ -17,6 +17,7 @@ import { createVolunteer } from "../../store/actions/voluteerAction";
 import { editSite } from "../../store/actions/siteActions";
 import ToolRequest from "./toolRequestForm";
 import AgendaTable from "./AgendaTable";
+import EnhancedTable from "./Volunteer";
 
 const API_KEY = "AIzaSyCukFLNeMl4inkvLQ8ZNNQzbC3q1zmcibI";
 
@@ -227,8 +228,8 @@ class SiteDetails extends React.Component {
             <Grid container spacing={3}>
 
               <Grid item xs={6}>
-
-                <VolunteerTable />
+                <EnhancedTable/>
+                {/* <VolunteerTable /> */}
                 <div className="row">
                   <div className="col xs=6 md=6 lg=6">
                     <Button
