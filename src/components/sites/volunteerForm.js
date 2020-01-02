@@ -19,7 +19,10 @@ export default function VolunteerForm(site) {
     const [open, setOpen] = useState(false);
     const [isBuyShirt, setBuyShirt] = useState(false);
     const [isBuyTool, setBuyTool] = useState(false);
-    const dob = new Date();
+    const [name, setName] = useState();
+    const [email, setEmail] = useState();
+    const [phoneNumber, setPhone] = useState();
+    const [dob, setDate] = useState(new Date());
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -32,36 +35,40 @@ export default function VolunteerForm(site) {
     const handleBuyTool=()=> {
         setBuyTool(!isBuyTool);
     };
-    const handleChange = e => {
-        this.setState({
-            [e.target.id]: e.target.value
-        });
+    const handleChangeName = e => {
+       setName(e.target.value)
     };
+    const handleChangeEmail= e => {
+        setEmail(e.target.value)
+    };
+    const handleChangePhone = e => {
+        setPhone(e.target.value)
+    };
+    const handleChangeDOB = date => {
+        setDate(date)
+    };
+
     const handleSubmit = e => {
         e.preventDefault();
         // console.log(this.state);
         const volunteer = {
-            id: (this.state.email + this.state.name)
+            id: (email + name)
                 .split("@")
                 .join("")
                 .split(".")
                 .join("")
                 .split(" ")
                 .join(""),
-            name: this.state.name,
-            email: this.state.email,
-            phoneNumber: this.state.phoneNumber,
-            dob: this.state.dob,
-            siteId: this.props.match.params.id
+            name: name,
+            email: email,
+            phoneNumber: phoneNumber,
+            dob: dob,
+            // siteId: this.props.match.params.id
         };
         this.props.createVolunteer(volunteer);
         this.props.history.push("/");
     };
-    const handleChangeDOB = date => {
-        this.setState({
-            dob: date
-        });
-    };
+
     return (
         <div>
             <Button variant="outlined" color="primary" onClick={handleClickOpen}>
@@ -76,21 +83,20 @@ export default function VolunteerForm(site) {
                             <input
                                 type="text"
                                 id="name"
-                                onChange={handleChange}
+                                onChange={handleChangeName}
                                 required
                             />
                             <label htmlFor="name">Tên</label>
                             <FormError
                                 type="title"
-                                // isHidden={this.state.isInputValid}
-                                // errorMessage={this.state.errorMessage}
+
                             />
                         </div>
                         <div className="input-field">
                       <textarea
                           id="email"
                           className="materialize-textarea"
-                          onChange={handleChange}
+                          onChange={handleChangeEmail}
                           required
                       >
 
@@ -101,7 +107,7 @@ export default function VolunteerForm(site) {
                       <textarea
                           id="phoneNumber"
                           className="materialize-textarea"
-                          onChange={handleChange}
+                          onChange={handleChangePhone}
                       >
 
                       </textarea>

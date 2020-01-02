@@ -2,17 +2,14 @@ import React from "react";
 import { withGoogleMap, withScriptjs } from "react-google-maps";
 import MapClusterer from "./MapClusterer";
 import {
-  MenuList,
-  MenuItem,
-  Grid,
-  withStyles,
-  TableRow,
-  Popper,
-  Divider,
-  ClickAwayListener,
-  Grow,
-  Avatar,
-  Card,
+  MenuList,  MenuItem,
+  Grid,  withStyles,
+  TableRow,  Popper,
+  Divider,  ClickAwayListener,
+  Grow,  Avatar,
+  Card,  CardHeader,
+  CardContent,  CardMedia,
+  TableBody, TableCell, TableContainer, TableHead
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
@@ -20,11 +17,7 @@ import { firestoreConnect } from "react-redux-firebase";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import Paper from "@material-ui/core/Paper";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
+
 // import MoreVertIcon from '@material-ui/icons/MoreVert';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
@@ -37,8 +30,8 @@ const useStyles = theme => ({
   card: {
     display: "flex"
   },
-  media:{
-    height:0,
+  media: {
+    height: 0,
     paddingTop: '56.25%',
   },
   details: {
@@ -61,12 +54,6 @@ const useStyles = theme => ({
     height: 38,
     width: 38
   },
-  sizeAvatar:{
-    width: '100%',
-    height: '100%'
-
-  },
-
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
@@ -83,10 +70,10 @@ class MapWithAllMarker extends React.Component {
     super(props);
     this.state = {
       columns: [
-        { title: "Tiêu Đề", field: "name" , phoneNumber: ''},
+        { title: "Tiêu Đề", field: "name", phoneNumber: '' },
         { title: "Ảnh Đại Diện", field: "avatar" },
-        { title: "Event Date", field: 'startDate'},
-        { title: 'address', field: 'address'}
+        { title: "Event Date", field: 'startDate' },
+        { title: 'address', field: 'address' }
       ],
       dataApproval: [],
       currentId: '',
@@ -94,8 +81,8 @@ class MapWithAllMarker extends React.Component {
   }
 
   updateShared(shared_value) {
-    this.setState({currentMarker: shared_value});
-}
+    this.setState({ currentMarker: shared_value });
+  }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     const sitesApprove = [];
@@ -108,20 +95,18 @@ class MapWithAllMarker extends React.Component {
           endDate: Date(siteApproved.endDate),
           id: siteApproved.id
         };
-        // console.log(data.startDate, "startDate");
         sitesApprove.push(data);
       });
-      console.log(sitesApprove, "data approval");
+      // console.log(sitesApprove, "data approval");
       this.setState({
         dataApproval: sitesApprove
       });
     }
   }
-  
+
   render() {
     const AllSitesTable = () => {
       const { classes } = this.props;
-      console.log(this.props, 'this props trong allsitestable');
       const [open, setOpen] = React.useState(false);
       const anchorRef = React.useRef(null);
       const handleToggle = () => {
@@ -153,111 +138,104 @@ class MapWithAllMarker extends React.Component {
       }, [open]);
 
       const handleMouseOver = (event) => {
-        this.setState({currentId: event.currentTarget.getAttribute("value")})
+        this.setState({ currentId: event.currentTarget.getAttribute("value") })
       };
-      const handleMouseOut = () => {
-        this.setState({currentId: '1'})
-      };
-
       return (
-        <Paper className={classes.root}>
-          <TableContainer className={classes.container}>
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableCell>
-                  <Link to="/create">
-                    <Button color="primary" background-color="primary">
-                      Tạo Sự Kiện Mới
-                    </Button>
-                  </Link>
-                </TableCell>
-                <TableCell>
 
-                   <FilterListIcon
-                       ref={anchorRef}
-                       aria-controls={open ? "menu-list-grow" : undefined}
-                       aria-haspopup="true"
-                       onClick={handleToggle}/>
+        <Grid container spacing={2}>
+          <Grid container spacing={2}>
+            <Grid item xs={8} md={8} style={{ textAlign: 'center' }}>
+              <Link to="/create">
+                <Button color="primary" background-color="primary">
+                  Tạo Sự Kiện Mới
+              </Button>
+              </Link>
+            </Grid>
+            <Grid item xs={4} md={4} style={{ textAlign: 'center' }}>
+              <FilterListIcon
+                ref={anchorRef}
+                aria-controls={open ? "menu-list-grow" : undefined}
+                aria-haspopup="true"
+                onClick={handleToggle} />
 
-                  <Popper
-                    open={open}
-                    anchorEl={anchorRef.current}
-                    role={undefined}
-                    transition
-                    disablePortal
+              <Popper
+                open={open}
+                anchorEl={anchorRef.current}
+                role={undefined}
+                transition
+                disablePortal
+              >
+                {({ TransitionProps, placement }) => (
+                  <Grow
+                    {...TransitionProps}
+                    style={{
+                      transformOrigin:
+                        placement === "bottom"
+                          ? "center top"
+                          : "center bottom"
+                    }}
                   >
-                    {({ TransitionProps, placement }) => (
-                      <Grow
-                        {...TransitionProps}
-                        style={{
-                          transformOrigin:
-                            placement === "bottom"
-                              ? "center top"
-                              : "center bottom"
-                        }}
-                      >
-                        <Paper>
-                          <ClickAwayListener onClickAway={handleClose}>
-                            <MenuList
-                              autoFocusItem={open}
-                              id="menu-list-grow"
-                              onKeyDown={handleListKeyDown}
-                            >
-                              <MenuItem onClick={handleClose}>
-                                Địa Điểm Tổ Chức
+                    <Paper>
+                      <ClickAwayListener onClickAway={handleClose}>
+                        <MenuList
+                          autoFocusItem={open}
+                          id="menu-list-grow"
+                          onKeyDown={handleListKeyDown}
+                        >
+                          <MenuItem onClick={handleClose}>
+                            Địa Điểm Tổ Chức
                               </MenuItem>
-                              <MenuItem onClick={handleClose}>
-                                Số Người Tham Gia
+                          <MenuItem onClick={handleClose}>
+                            Số Người Tham Gia
                               </MenuItem>
-                              <MenuItem onClick={handleClose}>
-                                Ngày Tổ Chức
+                          <MenuItem onClick={handleClose}>
+                            Ngày Tổ Chức
                               </MenuItem>
-                            </MenuList>
-                          </ClickAwayListener>
-                        </Paper>
-                      </Grow>
-                    )}
-                  </Popper>
-                </TableCell>
-              </TableHead>
-              <Divider />
-              <TableBody>
-                {this.state.dataApproval.map( (row, index) => {
-                  return (
-                    <Link to={`/site/${row.id}`} key={index}>
-                      <TableRow
-                        hover
-                        tabIndex={-1}
-                        key={row.id}
-                        value={row.id}
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                          <TableCell>
-                            <h5>{row.name}</h5>
-                            <div>{row.address}</div>
-                          </TableCell>
-                          <TableCell>
-                            <Avatar src={row.avatar}/>
-                          </TableCell>
+                        </MenuList>
+                      </ClickAwayListener>
+                    </Paper>
+                  </Grow>
+                )}
+              </Popper>
+            </Grid>
+          </Grid>
 
-                      </TableRow>
-                    </Link>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Paper>
-      );
-    };
-    console.log(this.state.currentId, 'current id ne');
+          {this.state.dataApproval.map(row => {
+            return (
+              <Card className={classes.card}
+                value = {row.id}
+                onMouseOver={handleMouseOver} 
+
+                key={row.id}>
+               <Link to={`site/${row.id}`}>
+                <CardHeader
+                  avatar={
+                    <Avatar className={classes.avatar}>
+                      <img src={row.avatar} />
+                    </Avatar>
+                  }
+                  title={row.name}
+                  subheader={row.startDate}
+                />
+                <CardContent>
+                  {row.address}
+                </CardContent>
+                </Link>
+              </Card>
+             
+            );
+          })}
+
+        </Grid>
+
+    );
+  };
     return (
       // <Grid container spacing={3}>
       this.state.dataApproval ? (
         <Grid container spacing={3}>
           <Grid item xs={3} style={{ height: "100vh" }}>
-            <AllSitesTable/>
+            <AllSitesTable />
           </Grid>
           <Grid item xs={1}>
             {[
@@ -300,7 +278,6 @@ class MapWithAllMarker extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state, 'state trong MapWithAllMarker');
 
   return {
     sites: state.firestore.ordered.sitesApproved,
