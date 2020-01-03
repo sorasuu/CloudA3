@@ -41,11 +41,7 @@ function add(date, activity){
     activities.push(date,activity)
 }
 
-const rows = [
-    createData('21/12/2019', 'Event Begin'),
-    activities,
 
-];
 
 const useStyles = makeStyles({
     table: {
@@ -53,8 +49,13 @@ const useStyles = makeStyles({
     },
 });
 
-export default function AgendaTable() {
+export default function AgendaTable(props) {
+    console.log(props, 'agenda props');
     const classes = useStyles();
+    const rows = [
+        createData((props.date.toDate()).toLocaleString('en-GB'), 'Event Begin'),
+        activities,
+    ];
     const [open, setOpen] = React.useState(false);
     const [date, setDate] = React.useState(new Date());
     const [activity, setActivity] = React.useState();
