@@ -55,7 +55,7 @@ const rows = [
 
 const total = subtotal(rows);
 function CollectionTable(props) {
-  // console.log(props, "prop trong ColTab");
+  console.log(props, "prop trong ColTab");
   const classes = useStyles();
 
   return (

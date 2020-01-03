@@ -229,10 +229,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function EnhancedTable(props) {
-  console.log(props, 'props EnhancedTable');
-  const volunteer = props.data;
-  console.log(volunteer[0].name,'volunteer');
+export default function EnhancedTable() {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("email");
@@ -337,12 +334,11 @@ export default function EnhancedTable(props) {
                         scope="row"
                         padding="none"
                       >
-                        {volunteer.name}
+                        {row.name}
                       </TableCell>
-                      <TableCell align="right">{volunteer.email}</TableCell>
-                      <TableCell align='right'>{}</TableCell>
-                      <TableCell align="right">{volunteer.phoneNumber}</TableCell>
-
+                      <TableCell align="right">{row.email}</TableCell>
+                      <TableCell align="right">{row.dob}</TableCell>
+                      <TableCell align="right">{row.phoneNumber}</TableCell>
                     </TableRow>
                   );
                 })}
