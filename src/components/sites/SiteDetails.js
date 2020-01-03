@@ -81,6 +81,7 @@ class SiteDetails extends React.Component {
       owner: false,
       showRequest: false
     };
+
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -160,7 +161,7 @@ class SiteDetails extends React.Component {
       );
     };
 
-    if (site) {
+    if (site && this.state.volunteers) {
       return (
         <div className="container section site-details">
           <div className="row">
@@ -218,7 +219,9 @@ class SiteDetails extends React.Component {
                     site={site}
                   />
                   <div style={{ textAlign: "center", marginTop: 10 }}>
-                    {this.state.owner ? null : <VolunteerForm site={site} />}
+                    {this.state.owner ? null :
+                        <VolunteerForm props={this.props}
+                        />}
                   </div>
                 </Grid>
               </Grid>
@@ -228,8 +231,8 @@ class SiteDetails extends React.Component {
             <Grid container spacing={3}>
 
               <Grid item xs={6}>
-                <EnhancedTable/>
-                {/* <VolunteerTable /> */}
+                <EnhancedTable data={this.state.volunteers}/>
+                {/* <VolunteerTable />*/}
                 <div className="row">
                   <div className="col xs=6 md=6 lg=6">
                     <Button
