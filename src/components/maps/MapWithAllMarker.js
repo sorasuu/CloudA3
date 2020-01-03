@@ -3,13 +3,11 @@ import { withGoogleMap, withScriptjs } from "react-google-maps";
 import MapClusterer from "./MapClusterer";
 import {
   MenuList,  MenuItem,
-  Grid,  withStyles,
-  TableRow,  Popper,
-  Divider,  ClickAwayListener,
+  Grid,  withStyles, Popper,
+  ClickAwayListener,
   Grow,  Avatar,
   Card,  CardHeader,
   CardContent,  CardMedia,
-  TableBody, TableCell, TableContainer, TableHead
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
@@ -17,15 +15,10 @@ import { firestoreConnect } from "react-redux-firebase";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import Paper from "@material-ui/core/Paper";
-
-// import MoreVertIcon from '@material-ui/icons/MoreVert';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
-
 const API_KEY = "AIzaSyCukFLNeMl4inkvLQ8ZNNQzbC3q1zmcibI";
-
 const MapWrapped = withScriptjs(withGoogleMap(MapClusterer));
-
 const useStyles = theme => ({
   card: {
     display: "flex"
@@ -91,8 +84,7 @@ class MapWithAllMarker extends React.Component {
         const data = {
           name: siteApproved.title,
           address: siteApproved.address,
-          startDate: Date(siteApproved.startDate).toString(),
-          endDate: Date(siteApproved.endDate),
+          date: (siteApproved.date.toDate()).toLocaleString('en-GB'),
           id: siteApproved.id
         };
         sitesApprove.push(data);
@@ -215,14 +207,13 @@ class MapWithAllMarker extends React.Component {
                     </Avatar>
                   }
                   title={row.name}
-                  subheader={row.startDate}
+                  subheader={row.date}
                 />
                 <CardContent>
                   {row.address}
                 </CardContent>
                 </Link>
               </Card>
-             
             );
           })}
 

@@ -25,7 +25,7 @@ function VolunteerForm(props) {
   const [isBuyTool, setBuyTool] = useState(false);
   const [name, setName] = useState();
   const [email, setEmail] = useState();
-  const [phoneNumber, setPhone] = useState();
+  const [phoneNumber, setPhone] = useState(null);
   const [dob, setDate] = useState(new Date());
   const handleClickOpen = () => {
     setOpen(true);
@@ -67,9 +67,11 @@ function VolunteerForm(props) {
       email: email,
       phoneNumber: phoneNumber,
       dob: dob,
-      // siteId: this.props.match.params.id
-      siteId: props.props.id
+      siteId: props.props.match.params.id
+      // siteId: props.props.id
     };
+    console.log(volunteer.siteId);
+    console.log(volunteer.id)
     props.props.createVolunteer(volunteer);
     props.props.history.push("/");
   };
@@ -115,7 +117,7 @@ function VolunteerForm(props) {
               <textarea
                 id="phoneNumber"
                 className="materialize-textarea"
-                onChange={handleChangePhone}
+                onChange={handleChangePhone} defaultValue={null}
               ></textarea>
               <label htmlFor="phoneNumber">Số Điện Thoại</label>
               <FormError

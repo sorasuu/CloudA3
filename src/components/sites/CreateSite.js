@@ -29,7 +29,7 @@ const validateInput = (checkingText) =>{
 
 const ImageAudioVideo = () => {
   const getUploadParams = ({ meta }) => {
-    const url = 'https://httpbin.org/post'
+    const url = 'https://httpbin.org/post';
     return { url, meta: { fileUrl: `${url}/${encodeURIComponent(meta.name)}` } }
   };
 
@@ -122,7 +122,7 @@ class CreateSite extends Component {
             <FormError type="title" isHidden={this.state.isInputValid} errorMessage={this.state.errorMessage}/>
           </div>
           <Grid container spacing={3}>
-            <Grid item xs={6}><ImageAudioVideo /></Grid>
+            <Grid item xs={6} md={6} lg={6}><ImageAudioVideo /></Grid>
           </Grid>
 
           <div className="input-field">

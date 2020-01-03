@@ -121,46 +121,6 @@ class SiteDetails extends React.Component {
     const { site } = this.props;
     console.log(this.props, 'site details props');
 
-    const VolunteerTable = () => {
-      return (
-        <MaterialTable
-          title="Danh Sách Tham Gia"
-          // style={{width:'100%', height:'80vh'}}
-          columns={this.state.columns}
-          data={this.state.volunteers}
-          editable={
-            // this.state.owner &&
-            {
-              onRowUpdate: (newData, oldData) =>
-                new Promise(resolve => {
-                  setTimeout(() => {
-                    resolve();
-                    if (oldData) {
-                      this.setState(prevState => {
-                        const volunteers = [...prevState.volunteers];
-                        volunteers[volunteers.indexOf(oldData)] = newData;
-                        return { ...prevState, volunteers };
-                      });
-                    }
-                  }, 600);
-                }),
-              onRowDelete: oldData =>
-                new Promise(resolve => {
-                  setTimeout(() => {
-                    resolve();
-                    this.setState(prevState => {
-                      const volunteers = [...prevState.volunteers];
-                      volunteers.splice(volunteers.indexOf(oldData), 1);
-                      return { ...prevState, volunteers };
-                    });
-                  }, 600);
-                })
-            }
-          }
-        />
-      );
-    };
-
     if (site && this.state.volunteers) {
       return (
         <div className="container section site-details">
@@ -227,11 +187,11 @@ class SiteDetails extends React.Component {
               </Grid>
             </div>
             <h5>Agenda</h5>
-            <AgendaTable/>
+            <AgendaTable date={this.props.site.date}/>
             <Grid container spacing={3}>
 
               <Grid item xs={6}>
-                <EnhancedTable data={this.state.volunteers}/>
+                <EnhancedTable volunteers={this.state.volunteers}/>
                 {/* <VolunteerTable />*/}
                 <div className="row">
                   <div className="col xs=6 md=6 lg=6">

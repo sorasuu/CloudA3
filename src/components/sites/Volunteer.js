@@ -230,9 +230,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function EnhancedTable(props) {
-  console.log(props, 'props EnhancedTable');
-  const volunteer = props.data;
-  console.log(volunteer[0].name,'volunteer');
+  // console.log(props, 'props EnhancedTable');
+  const volunteers = props.volunteers;
+  // console.log((volunteers[1].dob.toDate().toString()),'volunteer dob');
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("email");
@@ -306,10 +306,10 @@ export default function EnhancedTable(props) {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={volunteers.length}
             />
             <TableBody>
-              {stableSort(rows, getSorting(order, orderBy))
+              {stableSort(volunteers, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
@@ -322,7 +322,7 @@ export default function EnhancedTable(props) {
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={index}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -337,11 +337,11 @@ export default function EnhancedTable(props) {
                         scope="row"
                         padding="none"
                       >
-                        {volunteer.name}
+                        {row.name}
                       </TableCell>
-                      <TableCell align="right">{volunteer.email}</TableCell>
-                      <TableCell align='right'>{}</TableCell>
-                      <TableCell align="right">{volunteer.phoneNumber}</TableCell>
+                      <TableCell align="right">{row.email}</TableCell>
+                      <TableCell align='right'>{(row.dob.toDate()).toLocaleDateString('en-GB')}</TableCell>
+                      <TableCell align="right">{row.phoneNumber}</TableCell>
 
                     </TableRow>
                   );
