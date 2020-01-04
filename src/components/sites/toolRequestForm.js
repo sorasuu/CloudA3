@@ -1,10 +1,8 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 function FormError(props) {
@@ -37,17 +35,24 @@ export default function ToolRequest() {
         setOpen(false);
     };
 
-    const handleChange = e => {
-        this.setState({
-            [e.target.id]: e.target.value
-        });
+    const handleChangeShirt = e => {
+       setShirt(e)
+    };
+    const handleChangeTong = e => {
+        setTong(e)
+    };
+    const handleChangeGloves = e => {
+        setGloves(e)
+    };
+    const handleChangeBag = e => {
+        setBag(e)
     };
 
     const handleSubmit = e => {
         e.preventDefault();
         // console.log(this.state);
         const ToolRequest = {
-
+            shirt, tong, gloves, bag
         };
         // this.props.createVolunteer(volunteer);
         this.props.history.push("/");
@@ -66,7 +71,7 @@ export default function ToolRequest() {
                             <input
                                 type="numeric"
                                 id="shirt"
-                                onChange={handleChange}
+                                onChange={handleChangeShirt}
                                 required
                             />
                         </div>
@@ -76,7 +81,7 @@ export default function ToolRequest() {
                             <input
                                 type="numeric"
                                 id="tong"
-                                onChange={handleChange}
+                                onChange={handleChangeTong}
                                 required
                             />
                         </div>
@@ -86,7 +91,7 @@ export default function ToolRequest() {
                             <input
                                 type="numeric"
                                 id="gloves"
-                                onChange={handleChange}
+                                onChange={handleChangeGloves}
                                 required
                             />
                         </div>
@@ -96,7 +101,7 @@ export default function ToolRequest() {
                             <input
                                 type="numeric"
                                 id="bag"
-                                onChange={handleChange}
+                                onChange={handleChangeBag}
                                 required
                             />
                         </div>
@@ -106,8 +111,8 @@ export default function ToolRequest() {
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleClose} color="primary">
-                        Subscribe
+                    <Button onClick={handleSubmit} color="primary">
+                        Submit Request
                     </Button>
                 </DialogActions>
             </Dialog>

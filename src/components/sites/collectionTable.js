@@ -79,12 +79,18 @@ function CollectionTable(props) {
             </TableRow>
           ))}
 
+
           <TableRow style={{ background: "lightgreen" }}>
             <TableCell align={"center"}>Total</TableCell>
             <TableCell align="right">{total.totalQty}</TableCell>
             <TableCell align="right">{total.totalUnit}</TableCell>
             <TableCell align="right">{ccyFormat(total.totalWeight)}</TableCell>
           </TableRow>
+            <TableRow style={{ background: "lightgreen" }}>
+                <TableCell align={"center"}>Number of Participants</TableCell>
+                <TableCell align="right" colSpan={3}>1SoGiDo</TableCell>
+
+            </TableRow>
         </TableBody>
       </Table>
     </TableContainer>
