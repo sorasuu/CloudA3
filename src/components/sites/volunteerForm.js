@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -25,7 +26,7 @@ function VolunteerForm(props) {
   const [isBuyTool, setBuyTool] = useState(false);
   const [name, setName] = useState();
   const [email, setEmail] = useState();
-  const [phoneNumber, setPhone] = useState(null);
+  const [phoneNumber, setPhone] = useState();
   const [dob, setDate] = useState(new Date());
   const handleClickOpen = () => {
     setOpen(true);
@@ -67,11 +68,9 @@ function VolunteerForm(props) {
       email: email,
       phoneNumber: phoneNumber,
       dob: dob,
-      siteId: props.props.match.params.id
-      // siteId: props.props.id
+      // siteId: this.props.match.params.id
+      siteId: props.props.id
     };
-    console.log(volunteer.siteId);
-    console.log(volunteer.id)
     props.props.createVolunteer(volunteer);
     props.props.history.push("/");
   };
@@ -117,7 +116,7 @@ function VolunteerForm(props) {
               <textarea
                 id="phoneNumber"
                 className="materialize-textarea"
-                onChange={handleChangePhone} defaultValue={null}
+                onChange={handleChangePhone}
               ></textarea>
               <label htmlFor="phoneNumber">Số Điện Thoại</label>
               <FormError

@@ -1,3 +1,4 @@
+
 import React from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
@@ -230,9 +231,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function EnhancedTable(props) {
-  // console.log(props, 'props EnhancedTable');
-  const volunteers = props.volunteers;
-  // console.log((volunteers[1].dob.toDate().toString()),'volunteer dob');
+  console.log(props, 'props EnhancedTable');
+  const volunteer = props.data;
+  console.log(volunteer[0].name,'volunteer');
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("email");
@@ -306,10 +307,10 @@ export default function EnhancedTable(props) {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={volunteers.length}
+              rowCount={rows.length}
             />
             <TableBody>
-              {stableSort(volunteers, getSorting(order, orderBy))
+              {stableSort(rows, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
@@ -322,7 +323,7 @@ export default function EnhancedTable(props) {
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={index}
+                      key={row.name}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -337,11 +338,11 @@ export default function EnhancedTable(props) {
                         scope="row"
                         padding="none"
                       >
-                        {row.name}
+                        {volunteer.name}
                       </TableCell>
-                      <TableCell align="right">{row.email}</TableCell>
-                      <TableCell align='right'>{(row.dob.toDate()).toLocaleDateString('en-GB')}</TableCell>
-                      <TableCell align="right">{row.phoneNumber}</TableCell>
+                      <TableCell align="right">{volunteer.email}</TableCell>
+                      <TableCell align='right'>{}</TableCell>
+                      <TableCell align="right">{volunteer.phoneNumber}</TableCell>
 
                     </TableRow>
                   );
@@ -368,3 +369,4 @@ export default function EnhancedTable(props) {
     </div>
   );
 }
+

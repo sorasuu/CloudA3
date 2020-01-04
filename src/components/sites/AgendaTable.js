@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -41,7 +42,11 @@ function add(date, activity){
     activities.push(date,activity)
 }
 
+const rows = [
+    createData('21/12/2019', 'Event Begin'),
+    activities,
 
+];
 
 const useStyles = makeStyles({
     table: {
@@ -49,13 +54,8 @@ const useStyles = makeStyles({
     },
 });
 
-export default function AgendaTable(props) {
-    console.log(props, 'agenda props');
+export default function AgendaTable() {
     const classes = useStyles();
-    const rows = [
-        createData((props.date.toDate()).toLocaleString('en-GB'), 'Event Begin'),
-        activities,
-    ];
     const [open, setOpen] = React.useState(false);
     const [date, setDate] = React.useState(new Date());
     const [activity, setActivity] = React.useState();
