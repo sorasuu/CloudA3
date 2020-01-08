@@ -17,7 +17,6 @@ import ToolRequest from "./toolRequestForm";
 import AgendaTable from "./AgendaTable";
 import EnhancedTable from "./Volunteer";
 import CarouselImage from "../layout/ImageGridView";
-import anh2 from "../../images/ok2.png";
 
 const API_KEY = "AIzaSyCukFLNeMl4inkvLQ8ZNNQzbC3q1zmcibI";
 
@@ -212,12 +211,10 @@ class SiteDetails extends React.Component {
                   />
                 </Grid>
               </Grid>
-
+              <EnhancedTable volunteers={this.state.volunteers} />
               <Grid container spacing={3}>
-                <Grid item xs={6}>
-                  <EnhancedTable volunteers={this.state.volunteers} />
-                  <div className="row">
-                    <div className="col xs=6 md=6 lg=6">
+                <Grid item xs={4}>
+                    <div className="col xs=4 md=4 lg=4">
                       <Button
                         variant="outlined"
                         color="primary"
@@ -226,20 +223,18 @@ class SiteDetails extends React.Component {
                         Download Excel
                       </Button>
                     </div>
-                    <div className="col xs=6 md=6 lg=6">
-                      <ToolRequest />
-                    </div>
-                  </div>
                 </Grid>
-                <Grid item xs={6}>
-                  {/*Event Pictures*/}
-                  <CarouselImage />
+                <Grid item xs={4}> <div className="col xs=4 md=4 lg=4">
+                  <ToolRequest />
+                </div></Grid>
+                <Grid item xs={4}> <div>
                   {this.state.owner ? (
-                    <div className="container">
-                      <ImageAudioVideo />
-                    </div>
+                      <div>
+                        <ImageAudioVideo />
+                      </div>
                   ) : null}
-                </Grid>
+                </div></Grid>
+
               </Grid>
               <h5 style={{ textAlign: "center" }}>Collection Table</h5>
               <CollectionTable props={this.props} />

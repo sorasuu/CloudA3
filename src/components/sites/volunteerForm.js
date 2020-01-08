@@ -75,6 +75,7 @@ function VolunteerForm(props) {
   const handleClose = () => {
     setOpen(false);
   };
+
   const handleBuyShirt = () => {
     setBuyShirt(!isBuyShirt);
   };

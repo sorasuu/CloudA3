@@ -115,7 +115,6 @@ const MapWithASearchBox = compose(
         </SearchBox>
 
         {props.markers.map((marker, index, i) =>
-
             <div>
                 <Marker key={index}
                         position={marker.position}
