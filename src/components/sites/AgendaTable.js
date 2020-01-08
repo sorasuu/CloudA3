@@ -43,7 +43,8 @@ function add(date, activity) {
 
 const useStyles = makeStyles({
   table: {
-    minWidth: 700
+    maxWidth: 700,
+    minWidth:300,
   }
 });
 
@@ -93,9 +94,11 @@ export default function AgendaTable(props) {
           </TableBody>
         </Table>
       </TableContainer>
+      <div style={{textAlign:"right"}}>
       <Button variant={"outlined"} color={"primary"} onClick={handleClickOpen}>
         Add Activity
       </Button>
+      </div>
       <Dialog
         open={open}
         onClose={handleClose}

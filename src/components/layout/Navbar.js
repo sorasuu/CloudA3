@@ -1,11 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-
 import SignedInLinks from './SignedInLinks'
 import SignedOutLinks from './SignedOutLinks'
 import { connect } from 'react-redux'
 import { makeStyles, AppBar, Toolbar, Typography} from '@material-ui/core'
-
+import logo from '../../images/VNSX-Logo.png'
 const useStyles = makeStyles(theme => ({
   appBar: {
     transition: theme.transitions.create(['margin', 'width'], {
@@ -37,7 +36,7 @@ const Navbar = props => {
         <Toolbar>
           <Link to="/">
             <Typography variant="title" className="title">
-              <img src="img\VNSX-Logo.png" alt="logo" height={50} />
+              <img src={logo} alt="logo" height={50} />
             </Typography>
           </Link>
           <div className={classes.root} />
