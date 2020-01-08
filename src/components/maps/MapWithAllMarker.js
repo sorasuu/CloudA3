@@ -1,3 +1,4 @@
+
 import React from "react";
 import { withGoogleMap, withScriptjs } from "react-google-maps";
 import MapClusterer from "./MapClusterer";
@@ -289,3 +290,4 @@ export default compose(
     // { collection: 'notifications', limit: 3, orderBy: ['time', 'desc']}
   ])
 )(withStyles(useStyles)(MapWithAllMarker));
+

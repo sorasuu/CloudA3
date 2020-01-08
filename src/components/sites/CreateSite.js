@@ -5,7 +5,10 @@ import { Redirect } from 'react-router-dom'
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css"
 import MapWithSearch from '../maps/MapWithSearch'
+import {toast } from 'react-toastify';
 import Dropzone from 'react-dropzone-uploader'
+import 'react-dropzone-uploader/dist/styles.css'
+import axios from "axios"
 import {Grid} from '@material-ui/core'
 function FormError(props){
   if (props.isHidden){return null;}
@@ -15,6 +18,8 @@ function FormError(props){
     </div>
   )
 }
+const API_ENDPOINT = 'https://lddhkkp8ta.execute-api.ap-southeast-1.amazonaws.com/Prod'
+const MAX_IMAGE_SIZE ="10000000"
 const validateInput = (checkingText) =>{
   const regexp = /^[a-zA-Z]+$/;
   const checkingResult = regexp.exec(checkingText);
@@ -27,36 +32,7 @@ const validateInput = (checkingText) =>{
   }
 };
 
-const ImageAudioVideo = () => {
-  const getUploadParams = ({ meta }) => {
-    const url = 'https://httpbin.org/post';
-    return { url, meta: { fileUrl: `${url}/${encodeURIComponent(meta.name)}` } }
-  };
 
-  const handleChangeStatus = ({ meta }, status) => {
-    console.log(status, meta)
-  };
-
-  const handleSubmit = (files, allFiles) => {
-    console.log(files.map(f => f.meta));
-    allFiles.forEach(f => f.remove())
-  };
-
-  return (
-      <Dropzone
-          getUploadParams={getUploadParams}
-          onChangeStatus={handleChangeStatus}
-          // onSubmit={handleSubmit}
-          accept="image/*"
-          maxFiles={1}
-          inputContent={(files, extra) => (extra.reject ? 'Image file only' : 'Upload Logo of Organization' )}
-          styles={{
-            dropzoneReject: { borderColor: 'red', backgroundColor: '#DAA' },
-            inputLabel: (files, extra) => (extra.reject ? { color: 'red' } : {}),
-          }}
-      />
-  )
-};
 
 
 
@@ -74,6 +50,9 @@ class CreateSite extends Component {
     },
     confirm: false,
     pending: true,
+    image: null,
+    uploadURL: null,
+    file:null,
   };
   handleChange = (e) => {
     this.setState({
@@ -98,6 +77,53 @@ class CreateSite extends Component {
   handleShowMap(){
     this.setState({showMap: !this.state.showMap})
   }
+  onFileChange (e) {
+    let files = e.target.files || e.dataTransfer.files
+    if (!files.length) return
+    this.createImage(files[0])
+  }
+createImage= (file)=>{
+        
+    let reader = new FileReader()
+    reader.onload = (e)=>{
+        console.log('length: ', e.target.result.includes('data:image/jpeg'))
+        if (!e.target.result.includes('data:image/jpeg')) {
+          return alert('Wrong file type - JPG only.')
+        }
+        if (e.target.result.length > MAX_IMAGE_SIZE) {
+          return alert('Image is loo large - 1Mb maximum')
+        }
+        this.state.image= e.target.result
+    }
+    reader.readAsDataURL(file)
+}
+  onClickHandler = () => {
+    let binary = atob(this.state.image.split(',')[1])
+    let array = []
+    for (var i = 0; i < binary.length; i++) {
+      array.push(binary.charCodeAt(i))
+    }
+    let blobData = new Blob([new Uint8Array(array)], {type: 'image/jpeg'})
+    return axios.get(API_ENDPOINT).then((response)=>{
+      console.log(response)
+      this.setState({uploadURL:response.data.uploadURL})
+      return fetch(response.data.uploadURL, {
+          method: 'PUT',
+          body: blobData
+        })
+        .then(res => { // then print response status
+          toast.success('upload success')
+        })
+        .catch(err => { // then print response status
+          toast.error('upload fail')
+        })
+   
+  }).catch((err)=>{
+      console.log("Error in response");
+      console.log(err);
+  })
+    
+    }
   render() {
     const { auth } = this.props;
     if (!auth.uid)  return <Redirect to='/signin' />;
@@ -121,10 +147,11 @@ class CreateSite extends Component {
             <label htmlFor="organization">Tổ Chức Thành Lập Sự Kiện</label>
             <FormError type="title" isHidden={this.state.isInputValid} errorMessage={this.state.errorMessage}/>
           </div>
-          <Grid container spacing={3}>
+          {/* <Grid container spacing={3}>
             <Grid item xs={6} md={6} lg={6}><ImageAudioVideo /></Grid>
-          </Grid>
-
+          </Grid> */}
+          <input type="file" name="file" onChange={(e)=>this.onFileChange(e)}/>
+          <button type="button" class="btn btn-success btn-block" onClick={this.onClickHandler}>Upload</button>
           <div className="input-field">
             <input type="text" id='phoneNumber' onChange={this.handleChange} required />
             <label htmlFor="title">Số Điện Thoại Liên Hệ</label>

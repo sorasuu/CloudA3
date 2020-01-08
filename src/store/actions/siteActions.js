@@ -32,12 +32,12 @@ export const editSite = (site) => {
   }
 };
 
-export const updateSite = (site) => {
+export const updateSite = (siteField) => {
   return (dispatch, getState, {getFirestore}) => {
     const firestore = getFirestore();
 
-    firestore.collection('sites').doc(site.id).update({
-      "siteClicked":site.isClicked
+    firestore.collection('sites').doc(siteField.id).update({
+      siteField
     }).then(() => {
       dispatch({ type: 'UPDATE_SITE_SUCCESS' });
     }).catch(err => {

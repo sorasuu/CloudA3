@@ -24,3 +24,18 @@ export const createVolunteer = (volunteer) => {
       }
     }
   };
+export const sendEmail=(email)=>{
+  return (dispatch, getState, {getFirestore}) => {
+    const firestore = getFirestore();
+    const authorId = getState().firebase.auth.uid;
+    if(!authorId){
+    firestore.collection('sites').doc(email.siteId).collection('emails').doc(email.id).set({
+        ...email,
+        uid:null
+    }).then(() => {
+      dispatch({ type: 'CREATE_EMAIL_SUCCESS' });
+    }).catch(err => {
+      dispatch({ type: 'CREATE_EMAIL_ERROR' }, err);
+    });}
+  }
+}
