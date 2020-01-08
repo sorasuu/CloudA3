@@ -138,9 +138,7 @@ const MapWithASearchBox = compose(
 );
 
 export default class MapWithSearch extends Component {
-
     render() {
-
         let map;
         if (this.props.center.lat !== undefined) {
             map = <div>

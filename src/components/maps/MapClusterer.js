@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { GoogleMap, Marker, InfoWindow } from "react-google-maps";
 import { Link } from "react-router-dom";
 
 function MapClusterer(props) {
   // console.log(props);
+  console.log(props.currentLocation, "currentlocation");
   const [isOpen, setOpenInfo] = useState(false);
   const [markerIndex, setMarkerIndex] = useState(0);
   const {
@@ -16,10 +17,19 @@ function MapClusterer(props) {
   const handleClick = (site, index) => {
     setOpenInfo(true);
     setMarkerIndex(index);
+    // setCenter(
+    //     {
+    //       lat: parseFloat(site.location.lat),
+    //       lng: parseFloat(site.location.lng)
+    //     }
+    // )
   };
-
   return (
-    <GoogleMap defaultZoom={10} center={center}>
+    <GoogleMap
+      defaultZoom={10}
+      center={center}
+      // onBoundsChanged={}
+    >
       <MarkerClusterer averageCenter enableRetinaIcons gridSize={40}>
         {props.props.sites
           ? props.props.sites.map((site, index) => (
@@ -41,7 +51,8 @@ function MapClusterer(props) {
                   scaledSize: new window.google.maps.Size(40, 40)
                 }}
               >
-                {site.id === props.currentId ? (
+                {
+                  site.id === props.currentId ? (
                   <InfoWindow
                     onMouseLeave={() => {
                       setOpenInfo(false);
@@ -53,8 +64,10 @@ function MapClusterer(props) {
                       <Link to={`/site/${site.id}`}>Chi Tiết</Link>
                     </div>
                   </InfoWindow>
-                ):null}
-                {markerIndex === index && isOpen ? (
+                ) : null
+                }
+                {
+                  isOpen && markerIndex === index ? (
                   <InfoWindow
                     onMouseLeave={() => {
                       setOpenInfo(false);
@@ -66,7 +79,8 @@ function MapClusterer(props) {
                       <Link to={`/site/${site.id}`}>Chi Tiết</Link>
                     </div>
                   </InfoWindow>
-                ):null}
+                ) : null
+                }
               </Marker>
             ))
           : null}

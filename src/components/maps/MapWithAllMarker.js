@@ -70,6 +70,7 @@ class MapWithAllMarker extends React.Component {
         { title: 'address', field: 'address' }
       ],
       dataApproval: [],
+      currentLocation: {lat:'', lng:''},
       currentId: '',
     };
   }
@@ -86,11 +87,12 @@ class MapWithAllMarker extends React.Component {
           name: siteApproved.title,
           address: siteApproved.address,
           date: (siteApproved.date.toDate()).toLocaleString('en-GB'),
-          id: siteApproved.id
+          id: siteApproved.id,
+          avatar: siteApproved.image,
+          location: siteApproved.location
         };
         sitesApprove.push(data);
       });
-      // console.log(sitesApprove, "data approval");
       this.setState({
         dataApproval: sitesApprove
       });
@@ -98,6 +100,7 @@ class MapWithAllMarker extends React.Component {
   }
 
   render() {
+    console.log(this.state.dataApproval, 'dataApproval');
     const AllSitesTable = () => {
       const { classes } = this.props;
       const [open, setOpen] = React.useState(false);
@@ -131,7 +134,14 @@ class MapWithAllMarker extends React.Component {
       }, [open]);
 
       const handleMouseOver = (event) => {
-        this.setState({ currentId: event.currentTarget.getAttribute("value") })
+        const currentLocation = {
+          lat: event.currentTarget.getAttribute("valueLat"),
+          lng: event.currentTarget.getAttribute("valueLng")
+        };
+        this.setState({ currentId: event.currentTarget.getAttribute("value")});
+        this.setState({ currentLocation: currentLocation });
+        console.log(this.state.currentLocation.lat, this.state.currentLocation.lng, "day la location");
+        console.log(event.currentTarget.getAttribute("value"), 'day la id')
       };
       return (
 
@@ -194,9 +204,12 @@ class MapWithAllMarker extends React.Component {
           </Grid>
 
           {this.state.dataApproval.map(row => {
+            console.log(row.location.lat, 'row location ne');
             return (
               <Card className={classes.card}
-                value = {row.id}
+                valueLat = {row.location.lat}
+                    valueLng={row.location.lng}
+                    value = {row.id}
                 onMouseOver={handleMouseOver} 
                 style={{marginBottom:5}}
                 key={row.id}>
@@ -230,6 +243,7 @@ class MapWithAllMarker extends React.Component {
             <AllSitesTable />
           </Grid>
           <Grid item xs={1}>
+            <img src={'data:image/jpeg;base64,/9j/4AAQSkZJRgABAgAAAQABAAD'}/>
             {[
               "https://vietnamsachvaxanh.org/wp-content/uploads/a1.-HCMC-US-Consulate-logo-high-ress.png",
               "https://vietnamsachvaxanh.org/wp-content/uploads/a1.-SSISs.png",
@@ -248,10 +262,12 @@ class MapWithAllMarker extends React.Component {
               containerElement={<div style={{ height: `100%` }} />}
               mapElement={<div style={{ height: `100%` }} />}
               props={this.props}
-              currentId={this.state.currentId}
+              currentLocation={this.state.currentLocation}
+              currentId = {this.state.currentId}
             />
           </Grid>
           <Grid item xs={1}>
+
             {[
               "https://vietnamsachvaxanh.org/wp-content/uploads/vespa-adventures.png",
               "https://vietnamsachvaxanh.org/wp-content/uploads/a2000px-Intel-logo.svgs_.png",
