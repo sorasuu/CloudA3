@@ -3,7 +3,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { firestoreConnect } from "react-redux-firebase";
 import { compose } from "redux";
-import DatePicker from "react-datepicker";
 import VolunteerForm from "./volunteerForm";
 import { MapMarker } from "../maps/MapSiteDetail";
 import CollectionTable from "./collectionTable";
@@ -11,7 +10,6 @@ import { Grid, Divider, Button } from "@material-ui/core";
 import Dropzone from "react-dropzone-uploader";
 import "react-dropzone-uploader/dist/styles.css";
 import { withScriptjs, withGoogleMap } from "react-google-maps";
-import MaterialTable from "material-table";
 import * as XLSX from "xlsx";
 import * as FileSaver from "file-saver";
 import { createVolunteer } from "../../store/actions/voluteerAction";
@@ -19,6 +17,8 @@ import { editSite } from "../../store/actions/siteActions";
 import ToolRequest from "./toolRequestForm";
 import AgendaTable from "./AgendaTable";
 import EnhancedTable from "./Volunteer";
+import CarouselImage from "../layout/ImageGridView";
+import anh2 from "../../images/ok2.png";
 
 const API_KEY = "AIzaSyCukFLNeMl4inkvLQ8ZNNQzbC3q1zmcibI";
 
@@ -66,20 +66,22 @@ class SiteDetails extends React.Component {
     super(props);
 
     this.state = {
+      agendaColumns: [
+        { title: "Date", field: "date", type: "date" },
+        { title: "Activity", field: "activity", type: "text" }
+      ],
       columns: [
         { title: "Name", field: "name" },
         { title: "SDT", field: "phoneNumber", type: "numeric" },
         { title: "Email", field: "email" }
       ],
-      agendaData:[],
+      agendaData: [],
       volunteers: [],
       phoneNumber: "",
       volunteerNum: "",
       owner: false,
-      showRequest: false,
-      agenda:[]
+      showRequest: false
     };
-
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -119,148 +121,130 @@ class SiteDetails extends React.Component {
     const { site } = this.props;
     console.log(this.props, 'site details props');
 
-    const VolunteerTable = () => {
-      return (
-        <MaterialTable
-          title="Danh Sách Tham Gia"
-          // style={{width:'100%', height:'80vh'}}
-          columns={this.state.columns}
-          data={this.state.volunteers}
-          editable={
-            // this.state.owner &&
-            {
-              onRowUpdate: (newData, oldData) =>
-                new Promise(resolve => {
-                  setTimeout(() => {
-                    resolve();
-                    if (oldData) {
-                      this.setState(prevState => {
-                        const volunteers = [...prevState.volunteers];
-                        volunteers[volunteers.indexOf(oldData)] = newData;
-                        return { ...prevState, volunteers };
-                      });
-                    }
-                  }, 600);
-                }),
-              onRowDelete: oldData =>
-                new Promise(resolve => {
-                  setTimeout(() => {
-                    resolve();
-                    this.setState(prevState => {
-                      const volunteers = [...prevState.volunteers];
-                      volunteers.splice(volunteers.indexOf(oldData), 1);
-                      return { ...prevState, volunteers };
-                    });
-                  }, 600);
-                })
-            }
-          }
-        />
-      );
-    };
-
     if (site && this.state.volunteers) {
       return (
-        <div className="container section site-details">
-          <div className="row">
-            <div style={{ textAlign: "center" }}>
-              <h1>{site.title}</h1>
-            </div>
-            <Divider />
+        <div>
+
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <CarouselImage />
+            </Grid>
+            <Grid item xs={6}>
+              <CarouselImage />
+            </Grid>
+          </Grid>
+          <div className="container section site-details">
             <div>
-              <Grid container spacing={3}>
-                <Grid item xs={5} md={3} lg={3}>
-                  <div>
-                    <div className="card" style={{ minWidth: 200 }}>
+              <div style={{ textAlign: "center" }}>
+                <h1>{site.title}</h1>
+              </div>
+              <Divider />
+              <div className={'card'}>
+                <Grid container spacing={3}>
+                  <Grid item xs={5} md={3} lg={3}>
+                    <div
+                      className="card"
+                      style={{ minWidth: 100, maxWidth: 200 }}
+                    >
                       <div className="card-image">
                         <img src={site.authorPhotoURL} />
                       </div>
+                    </div>
+                  </Grid>
 
-                      <h4
-                        style={{ textAlign: "center", marginTop: "15px" }}
-                        className="card-title"
-                      >
-                        {site.authorName}
-                      </h4>
-                      <div className="card-content">
-                        <li>
-                          <i>Email: </i>
-                          <a>{site.authorEmail}</a>
-                        </li>
-                        <li>
-                          <i>Số Điện Thoại: </i>
-                          <a>{site.phoneNumber}</a>
-                        </li>
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <div className="card">
-                      <h5
-                        style={{ textAlign: "center", marginTop: "15px" }}
-                        className="card-title"
-                      >
-                        Nội Dung Sự Kiện
-                      </h5>
-                      <p style={{ textAlign: "center" }}>{site.content}</p>
-                      <div className="card-content"></div>
-                    </div>
-                  </div>
+                  <Grid item xs={7} md={9} lg={9}>
+                    <Grid container spacing={2}>
+                      <Grid item xs={7}>
+                        <div
+                          style={{
+                            width: `100%`,
+                            height: `100%`,
+                            paddingLeft: 30
+                          }}
+                        >
+                          <Grid container spacing={2}>
+                            <div className={'row'} style={{marginLeft:20}}>
+                              <h5>Organization:</h5>
+                              <div>{site.authorName}</div>
+                              <h6>Email:</h6>
+                              <div>{site.authorEmail}</div>
+                              <h6>Phone Number:</h6>
+                              <div>{site.phoneNumber}</div>
+                            </div>
+                          </Grid>
+                        </div>
+                      </Grid>
+                      <Grid item xs={5} md={3} lg={3}>
+                        <div
+                          style={{ width: `100%`, height: `100%` }}
+                        >
+                          <div className={'container'}  style={{ textAlign: "center" }}>
+                            <h5>
+                              Content
+                            </h5>
+                            <p>
+                              {site.content}
+                            </p>
+                          </div>
+                        </div>
+                      </Grid>
+                    </Grid>
+                  </Grid>
                 </Grid>
-                <Grid item xs={7} md={9} lg={9}>
-                  <h5 style={{ textAlign: "center" }}>Địa Điểm Tổ Chức</h5>
+              </div>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <h5>Agenda</h5>
+                  <AgendaTable date={this.props.site.date} />
+                  {this.state.owner ? null : (
+                      <div style={{textAlign: "center", paddingTop:20}}>
+                      <VolunteerForm props={this.props} />
+                      </div>
+                  )}
+                </Grid>
+                <Grid item xs={6}>
+                  <h6>Địa Điểm Tổ Chức</h6>
                   <MapWrapped
                     googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${API_KEY}`}
                     loadingElement={<div style={{ height: `80%` }} />}
                     containerElement={<div style={{ height: `80%` }} />}
-                    mapElement={<div style={{ height: `100%` }} />}
+                    mapElement={<div style={{ height: 500 }} />}
                     site={site}
                   />
-                  <div style={{ textAlign: "center", marginTop: 10 }}>
-                    {this.state.owner ? null :
-                        <VolunteerForm props={this.props}
-                        />
-
-                        
-                        }
-                  </div>
                 </Grid>
               </Grid>
+
+              <Grid container spacing={3}>
+                <Grid item xs={6}>
+                  <EnhancedTable volunteers={this.state.volunteers} />
+                  <div className="row">
+                    <div className="col xs=6 md=6 lg=6">
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        onClick={e => this.handleDownloadExcel(e)}
+                      >
+                        Download Excel
+                      </Button>
+                    </div>
+                    <div className="col xs=6 md=6 lg=6">
+                      <ToolRequest />
+                    </div>
+                  </div>
+                </Grid>
+                <Grid item xs={6}>
+                  {/*Event Pictures*/}
+                  <CarouselImage />
+                  {this.state.owner ? (
+                    <div className="container">
+                      <ImageAudioVideo />
+                    </div>
+                  ) : null}
+                </Grid>
+              </Grid>
+              <h5 style={{ textAlign: "center" }}>Collection Table</h5>
+              <CollectionTable props={this.props} />
             </div>
-            <h5>Agenda</h5>
-            <AgendaTable/>
-            <Grid container spacing={3}>
-
-              <Grid item xs={6}>
-                <EnhancedTable data={this.state.volunteers}/>
-                {/* <VolunteerTable />*/}
-                <div className="row">
-                  <div className="col xs=6 md=6 lg=6">
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      onClick={e => this.handleDownloadExcel(e)}
-                    >
-                      Download Excel
-                    </Button>
-                  </div>
-                  <div className="col xs=6 md=6 lg=6">
-                    <ToolRequest />
-                  </div>
-                </div>
-              </Grid>
-              <Grid item xs={6}>
-                {/*Event Pictures*/}
-
-                {this.state.owner ? (
-                  <div className="container">
-                    <ImageAudioVideo />
-                  </div>
-                ) : null}
-              </Grid>
-            </Grid>
-            <h5 style={{ textAlign: "center" }}>Collection Table</h5>
-            <CollectionTable props={this.props} />
           </div>
         </div>
       );
@@ -308,4 +292,3 @@ export default compose(
       ];
   })
 )(SiteDetails);
-

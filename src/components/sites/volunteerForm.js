@@ -2,15 +2,53 @@
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DatePicker from "react-datepicker";
-import { Checkbox } from "@material-ui/core";
-import { createVolunteer } from "../../store/actions/voluteerAction";
-import { editSite } from "../../store/actions/siteActions";
-import { compose } from "redux";
-import { connect } from "react-redux";
-import { firestoreConnect } from "react-redux-firebase";
+import {
+  Checkbox,
+  Input,
+  makeStyles,
+  useTheme,
+  InputLabel,
+  FormControl,
+  MenuItem,
+  Select,
+  Chip,
+  Grid
+} from "@material-ui/core";
+
+const useStyles = makeStyles(theme => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+    maxWidth: 300
+  },
+  chips: {
+    display: "flex",
+    flexWrap: "wrap"
+  },
+  chip: {
+    margin: 4
+  },
+  noLabel: {
+    marginTop: theme.spacing(2)
+  },
+  button:{
+    display: 'block',
+    marginTop: theme.spacing(2),
+  }
+}));
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250
+    }
+  }
+};
 
 function FormError(props) {
   if (props.isHidden) {
@@ -21,12 +59,16 @@ function FormError(props) {
 
 function VolunteerForm(props) {
   console.log(props, "props volunteerForm");
+  const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [isBuyShirt, setBuyShirt] = useState(false);
-  const [isBuyTool, setBuyTool] = useState(false);
+  const [buyTools, setBuyTools] = useState([]);
+  const tools = ["bags", "tong", "gloves"];
+  const [size, setSize] = useState();
+  const sizes = ['XS','S','M', 'L', 'XL'];
   const [name, setName] = useState();
   const [email, setEmail] = useState();
-  const [phoneNumber, setPhone] = useState();
+  const [phoneNumber, setPhone] = useState(null);
   const [dob, setDate] = useState(new Date());
   const handleClickOpen = () => {
     setOpen(true);
@@ -37,9 +79,14 @@ function VolunteerForm(props) {
   const handleBuyShirt = () => {
     setBuyShirt(!isBuyShirt);
   };
-  const handleBuyTool = () => {
-    setBuyTool(!isBuyTool);
+  const handleSize = event => {
+    setSize(event.target.value)
   };
+
+  const handleBuyTool = event => {
+    setBuyTools(event.target.value);
+  };
+
   const handleChangeName = e => {
     setName(e.target.value);
   };
@@ -68,8 +115,8 @@ function VolunteerForm(props) {
       email: email,
       phoneNumber: phoneNumber,
       dob: dob,
-      // siteId: this.props.match.params.id
-      siteId: props.props.id
+      siteId: props.props.match.params.id
+      // siteId: props.props.id
     };
     props.props.createVolunteer(volunteer);
     props.props.history.push("/");
@@ -117,6 +164,7 @@ function VolunteerForm(props) {
                 id="phoneNumber"
                 className="materialize-textarea"
                 onChange={handleChangePhone}
+                defaultValue={null}
               ></textarea>
               <label htmlFor="phoneNumber">Số Điện Thoại</label>
               <FormError
@@ -124,37 +172,81 @@ function VolunteerForm(props) {
                 // isHidden={this.state.isInputValid}
                 // errorMessage={this.state.errorMessage}
               />
-              <div className="row">
-                <div className="col xs=3">
-                  <label htmlFor="phoneNumber">Ngày Sinh </label>
-                  <DatePicker
-                    selected={dob}
-                    onChange={handleChangeDOB}
-                    dateFormat="dd-MM-yyyy"
-                  />
-                </div>
-                <div className="col xs=9">
-                  <i>Bạn có muốn mua: </i>
-                  <Checkbox
-                    checked={isBuyShirt}
-                    onClick={() => handleBuyShirt()}
-                  />
-                  Áo Earth-Day 2020 ($5) |
-                  <Checkbox
-                    checked={isBuyTool}
-                    onClick={() => handleBuyTool()}
-                  />
-                  Dụng Cụ
-                  {isBuyTool ? (
-                    <div className="row">
-                      <Checkbox /> tong ($5)
-                      <Checkbox /> gloves($5)
-                      <Checkbox /> bags ($5)
-                    </div>
-                  ) : null}
-                </div>
-              </div>
             </div>
+            <Grid container spacing={2}>
+              <Grid item xs={3}>
+                <label htmlFor="phoneNumber">Ngày Sinh </label>
+                <DatePicker
+                  selected={dob}
+                  onChange={handleChangeDOB}
+                  dateFormat="dd-MM-yyyy"
+                />
+              </Grid>
+              <Grid item xs={9}>
+                <div className={'card'} style={{paddingLeft:5}}>
+                <Grid container spacing={2}>
+                  <Grid item xs={4}>
+                    <i>Bạn có muốn mua: </i>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <Checkbox
+                      checked={isBuyShirt}
+                      onClick={() => handleBuyShirt()}
+                    />
+                    Áo Sự Kiện
+                    {isBuyShirt &&  <FormControl className={classes.formControl}>
+                      <InputLabel id="demo-controlled-open-select-label">Cỡ Áo:</InputLabel>
+                      <Select
+                          labelId="demo-controlled-open-select-label"
+                          id="demo-controlled-open-select"
+                          value={size}
+                          onChange={handleSize}
+                      >
+                        {sizes.map(name => (
+                            <MenuItem key={name} value={name}>
+                              {name}
+                            </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>}
+
+                    <FormControl className={classes.formControl}>
+                      <InputLabel id="demo-mutiple-chip-label">
+                        Chọn đồ
+                      </InputLabel>
+                      <Select
+                        labelId="demo-mutiple-chip-label"
+                        id="demo-mutiple-chip"
+                        multiple
+                        value={buyTools}
+                        onChange={handleBuyTool}
+                        input={<Input id="select-multiple-chip" />}
+                        renderValue={selected => (
+                          <div className={classes.chips}>
+                            {selected.map(value => (
+                              <Chip
+                                key={value}
+                                label={value}
+                                className={classes.chip}
+                              />
+                            ))}
+                          </div>
+                        )}
+                        MenuProps={MenuProps}
+                      >
+                        {tools.map(name => (
+                          <MenuItem key={name} value={name}>
+                            {name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                </Grid>
+                </div>
+              </Grid>
+            </Grid>
+
             <div className="input-field">
               <button className="btn lighten-1" color="#39B04B">
                 Đăng ký
@@ -174,24 +266,5 @@ function VolunteerForm(props) {
   );
 }
 
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     createVolunteer: volunteers => dispatch(createVolunteer(volunteers)),
-//
-//   };
-// };
-// export default compose(
-//   connect(mapDispatchToProps),
-//   firestoreConnect(props => {
-//     return [
-//       {
-//         collection: "sites",
-//         doc: props.id,
-//         subcollections: [{ collection: "volunteers" }],
-//         storeAs: "volunteers"
-//       }
-//     ];
-//   })
-// )(VolunteerForm);
-
 export default VolunteerForm;
+

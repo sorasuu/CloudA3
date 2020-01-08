@@ -8,7 +8,7 @@ import {
   ClickAwayListener,
   Grow,  Avatar,
   Card,  CardHeader,
-  CardContent,  CardMedia,
+  CardContent
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
@@ -198,13 +198,13 @@ class MapWithAllMarker extends React.Component {
               <Card className={classes.card}
                 value = {row.id}
                 onMouseOver={handleMouseOver} 
-
+                style={{marginBottom:5}}
                 key={row.id}>
                <Link to={`site/${row.id}`}>
                 <CardHeader
                   avatar={
                     <Avatar className={classes.avatar}>
-                      <img src={row.avatar} />
+                      <img src={row.avatar}  alt={'picture'}/>
                     </Avatar>
                   }
                   title={row.name}

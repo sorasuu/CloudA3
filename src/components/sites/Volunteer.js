@@ -22,26 +22,6 @@ import Switch from "@material-ui/core/Switch";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 
-function createData(name, email, dob, phoneNumber) {
-  return { name, email, dob, phoneNumber };
-}
-
-const rows = [
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Donut", 452, 25.0, 51, 4.9),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Honeycomb", 408, 3.2, 87, 6.5),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Jelly Bean", 375, 0.0, 94, 0.0),
-  createData("KitKat", 518, 26.0, 65, 7.0),
-  createData("Lollipop", 392, 0.2, 98, 0.0),
-  createData("Marshmallow", 318, 0, 81, 2.0),
-  createData("Nougat", 360, 19.0, 9, 37.0),
-  createData("Oreo", 437, 18.0, 63, 4.0)
-];
-
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -69,8 +49,8 @@ function getSorting(order, orderBy) {
 }
 
 const headCells = [
-  { id: "name", numeric: false, disablePadding: true, label: "Name" },
   { id: "email", numeric: false, disablePadding: false, label: "Email" },
+  { id: "name", numeric: false, disablePadding: true, label: "Name" },
   { id: "dob", numeric: false, disablePadding: false, label: "Date of Birth" },
   {
     id: "phoneNumber",
@@ -231,9 +211,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function EnhancedTable(props) {
-  console.log(props, 'props EnhancedTable');
-  const volunteer = props.data;
-  // console.log(volunteer[0].name,'volunteer');
+  // console.log(props, 'props EnhancedTable');
+  const volunteers = props.volunteers;
+  // console.log((volunteers[1].dob.toDate().toString()),'volunteer dob');
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("email");
@@ -249,19 +229,19 @@ export default function EnhancedTable(props) {
 
   const handleSelectAllClick = event => {
     if (event.target.checked) {
-      const newSelecteds = rows.map(n => n.name);
+      const newSelecteds = volunteers.map(n => n.email);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, email) => {
+    const selectedIndex = selected.indexOf(email);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, email);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -285,10 +265,10 @@ export default function EnhancedTable(props) {
     setPage(0);
   };
 
-  const isSelected = name => selected.indexOf(name) !== -1;
+  const isSelected = email => selected.indexOf(email) !== -1;
 
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+    rowsPerPage - Math.min(rowsPerPage, volunteers.length - page * rowsPerPage);
 
   return (
     <div className={classes.root}>
@@ -307,23 +287,23 @@ export default function EnhancedTable(props) {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={volunteers.length}
             />
             <TableBody>
-              {stableSort(rows, getSorting(order, orderBy))
+              {stableSort(volunteers, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.email);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={event => handleClick(event, row.name)}
+                      onClick={event => handleClick(event, row.email)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={index}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -338,11 +318,11 @@ export default function EnhancedTable(props) {
                         scope="row"
                         padding="none"
                       >
-                        {volunteer.name}
+                        {row.email}
                       </TableCell>
-                      <TableCell align="right">{volunteer.email}</TableCell>
-                      <TableCell align='right'>{}</TableCell>
-                      <TableCell align="right">{volunteer.phoneNumber}</TableCell>
+                      <TableCell align="right">{row.name}</TableCell>
+                      <TableCell align='right'>{(row.dob.toDate()).toLocaleDateString('en-GB')}</TableCell>
+                      <TableCell align="right">{row.phoneNumber}</TableCell>
 
                     </TableRow>
                   );
@@ -358,7 +338,7 @@ export default function EnhancedTable(props) {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={volunteers.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}
