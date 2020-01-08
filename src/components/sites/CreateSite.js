@@ -106,6 +106,7 @@ createImage= (file)=>{
     let blobData = new Blob([new Uint8Array(array)], {type: 'image/jpeg'})
     return axios.get(API_ENDPOINT).then((response)=>{
       console.log(response)
+      this.setState({uploadURL:response.data.uploadURL})
       return fetch(response.data.uploadURL, {
           method: 'PUT',
           body: blobData

@@ -66,10 +66,6 @@ class SiteDetails extends React.Component {
     super(props);
 
     this.state = {
-      agendaColumns:[
-        {title:"Date", field: 'date', type: 'date'},
-        {title:"Activity", field: 'activity', type:'text'}
-      ],
       columns: [
         { title: "Name", field: "name" },
         { title: "SDT", field: "phoneNumber", type: "numeric" },
@@ -80,7 +76,8 @@ class SiteDetails extends React.Component {
       phoneNumber: "",
       volunteerNum: "",
       owner: false,
-      showRequest: false
+      showRequest: false,
+      agenda:[]
     };
 
   }
@@ -222,7 +219,10 @@ class SiteDetails extends React.Component {
                   <div style={{ textAlign: "center", marginTop: 10 }}>
                     {this.state.owner ? null :
                         <VolunteerForm props={this.props}
-                        />}
+                        />
+
+                        
+                        }
                   </div>
                 </Grid>
               </Grid>

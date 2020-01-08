@@ -54,95 +54,101 @@ const useStyles = makeStyles({
     },
 });
 
-export default function AgendaTable() {
-    const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
-    const [date, setDate] = React.useState(new Date());
-    const [activity, setActivity] = React.useState();
-    const handleChangeActivity = (e) => {
-        setActivity(e)
+class AgendaTable extends React.Component {
+    constructor(props){
+        super(props)
+        this.setState({
+            open:false,
+            date: new Date(),
+            activity:""
+        })
+    }
+    handleChange = (e) => {
+        this.setState({
+          [e.target.id]: e.target.value
+        })
+      };
+    handleClickOpen = () => {
+        this.setState({open:true});
     };
-    const handleChangeDate = e => {
-        setDate(e)
+
+    handleClose = () => {
+        this.setState({open:false});
     };
-    const handleClickOpen = () => {
-        setOpen(true);
+    handleSubmit = () => {
+        this.setState({open:false});
     };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-    const handleSubmit = () => {
-
-    };
-    return (
-        <div>
-        <TableContainer component={Paper}>
-            <Table className={classes.table} aria-label="customized table">
-                <TableHead>
-                    <TableRow>
-                        <StyledTableCell>Date</StyledTableCell>
-                        <StyledTableCell align="center">Activity</StyledTableCell>
-
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rows.map((row, index) => (
-                        <StyledTableRow key={index}>
-                            <StyledTableCell component="th" scope="row">
-                                {row.date}
-                            </StyledTableCell>
-                            <StyledTableCell align="left">{row.activity}</StyledTableCell>
-
-                        </StyledTableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
-        <Button variant={"outlined"} color={"primary"} onClick={handleClickOpen}>Add Activity</Button>
-            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Add Activity</DialogTitle>
-                <DialogContent style={{minWidth:500, minHeight:400}}>
-                    <form>
-                        <div className={"input-field"}>
-
-                                <div>
-                                    Selection Time (h:mm aa):
-                                </div>
-                                    <DatePicker
-                                        selected={date}
-                                        onChange={handleChangeDate}
-                                        showTimeSelect
-                                        showTimeSelectOnly
-                                        timeFormat="HH:mm"
-                                        timeInterval={15}
-                                        timeCaption = "time"
-                                        dateFormat="h:mm a a"
-                                    />
-
-                                    <p>Activity</p>
-
-                                    <textarea
-                                        selected={activity}
-                                        id="content"
-                                        className="materialize-textarea"
-                                        onChange={handleChangeActivity}
-                                        required
-                                    />
-
-
-                        </div>
-                    </form>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={handleSubmit} color="primary">
-                        Add
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </div>
-    );
+    render(){
+        return (
+            <div>
+            <TableContainer component={Paper}>
+                <Table  aria-label="customized table">
+                    <TableHead>
+                        <TableRow>
+                            <StyledTableCell>Date</StyledTableCell>
+                            <StyledTableCell align="center">Activity</StyledTableCell>
+    
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {rows.map((row, index) => (
+                            <StyledTableRow key={index}>
+                                <StyledTableCell component="th" scope="row">
+                                    {row.date}
+                                </StyledTableCell>
+                                <StyledTableCell align="left">{row.activity}</StyledTableCell>
+    
+                            </StyledTableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <Button variant={"outlined"} color={"primary"} onClick={this.handleClickOpen}>Add Activity</Button>
+                <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+                    <DialogTitle id="form-dialog-title">Add Activity</DialogTitle>
+                    <DialogContent style={{minWidth:500, minHeight:400}}>
+                        <form>
+                            <div className={"input-field"}>
+    
+                                    <div>
+                                        Selection Time (h:mm aa):
+                                    </div>
+                                        <DatePicker
+                                            selected={this.date}
+                                            onChange={this.handleChangeDate}
+                                            showTimeSelect
+                                            showTimeSelectOnly
+                                            timeFormat="HH:mm"
+                                            timeInterval={15}
+                                            timeCaption = "time"
+                                            dateFormat="h:mm a a"
+                                        />
+    
+                                        <p>Activity</p>
+    
+                                        <textarea
+                                            selected={this.activity}
+                                            id="content"
+                                            className="materialize-textarea"
+                                            onChange={this.handleChangeActivity}
+                                            required
+                                        />
+    
+    
+                            </div>
+                        </form>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleClose} color="primary">
+                            Cancel
+                        </Button>
+                        <Button onClick={this.handleSubmit} color="primary">
+                            Add
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
+        );
+    }
 }
+export default  AgendaTable;
