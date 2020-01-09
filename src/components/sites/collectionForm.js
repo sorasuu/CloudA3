@@ -15,7 +15,7 @@ import {
   Chip,
   Grid
 } from "@material-ui/core";
-
+var button= null
 const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(1),
@@ -90,15 +90,19 @@ export default class CollectionForm extends Component {
   };
 
   render() {
-    return (
-      <div>
-        <Button
+    if(this.props.id.site.authorId === this.props.id.auth.uid){
+      button=  <Button
           variant="outlined"
           color="primary"
           onClick={this.handleClickOpen}
-        >
-          Tổng Kết Sự Kiện
-        </Button>
+      >
+        Tổng Kết Sự Kiện
+      </Button>
+    }
+    return (
+
+      <div>
+        {button}
         <Dialog
           open={this.state.isOpen}
           onClose={this.handleClose}
