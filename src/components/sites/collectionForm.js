@@ -50,32 +50,6 @@ export default class CollectionForm extends Component {
     super(props);
     this.state = {
       isOpen: false,
-      wasteTypes: [
-        {
-          type: "organic",
-          values: [
-            { title: "Food", qty: 0, weight: 0 },
-            { title: "Soiled Paper", qty: 0, weight: 0 },
-            { title: "Green Waste", qty: 0, weight: 0 }
-          ]
-        },
-        {
-          type: "Recycle",
-          values: [
-            { title: "Paper", qty: 0, weight: 0 },
-            { title: "Glass", qty: 0, weight: 0 },
-            { title: "Food Scraps", qty: 0, weight: 0 }
-          ]
-        },
-        {
-          type: "NonRecyclable",
-          values: [
-            { title: "Plastics", qty: 0, weight: 0 },
-            { title: "Metals", qty: 0, weight: 0 },
-            { title: "Batteries", qty: 0, weight: 0 }
-          ]
-        }
-      ],
       organic: 0,
       organicPiece: 0,
       recycle: 0,
@@ -87,6 +61,8 @@ export default class CollectionForm extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.handleSubmitCollection = this.handleSubmitCollection.bind(this);
+    console.log(this.props, "collectionForm")
   }
   handleChange(e) {
     this.setState({ [e.target.id]: e.target.value });
@@ -97,10 +73,20 @@ export default class CollectionForm extends Component {
   handleClose() {
     this.setState({ isOpen: false });
   }
-  handleSubmit(event) {
-    alert("submited");
+  handleSubmitCollection(event) {
     event.preventDefault();
-  }
+    const summary = {
+        // organic: this.state.organic,
+        organicPiece: this.state.organicPiece,
+        recycle: this.state.recycle,
+        recyclePiece: this.state.recyclePiece,
+        nonRecycle:this.state.nonRecycle,
+        nonRecyclePiece: this.state.nonRecyclePiece,
+        participants: this.state.participants
+    };
+    this.props.id.editSite({id: this.props.id.match.params.id, ...this.props.site, summary: summary})
+    this.handleClose()
+  };
   render() {
     return (
       <div>
@@ -117,7 +103,7 @@ export default class CollectionForm extends Component {
           aria-labelledby="form-dialog-title"
         >
           <DialogContent>
-            <form className="white" onSubmit={this.handleSubmit}>
+            <form className="white" onSubmit={this.handleSubmitCollection}>
               <h4
                 className="grey-text text-darken-3"
                 style={{ textAlign: "center" }}

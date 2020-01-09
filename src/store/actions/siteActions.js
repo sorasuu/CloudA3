@@ -22,8 +22,8 @@ export const editSite = (site) => {
   return (dispatch, getState, {getFirestore}) => {
     const firestore = getFirestore();
 
-    firestore.collection('sites').doc(site.id).set({
-      ...site,
+    firestore.collection('sites').doc(site.id).update({
+      summary: site.summary,
     }).then(() => {
       dispatch({ type: 'UPDATE_SITE_SUCCESS' });
     }).catch(err => {
@@ -57,5 +57,5 @@ export const sendTool = (tool) =>{
       dispatch({ type: 'TOOL_SITE_ERROR' }, err);
     });
   }
-}
+};
 

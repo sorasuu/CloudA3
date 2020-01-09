@@ -39,7 +39,8 @@ const validateInput = checkingText => {
 
 export default function ToolRequest(props) {
     const classes = useStyles();
-    var button = null
+    console.log(props.props,'ToolRequest' );
+    var button = null;
     const [open, setOpen] = React.useState(false);
     const [shirt, setShirt] = React.useState(0);
     const [tong, setTong] = React.useState(0);
@@ -71,11 +72,10 @@ export default function ToolRequest(props) {
         e.preventDefault();
 
         setOpen(false);
-        console.log(props);
         const ToolRequest = {
             "id":props.props.match.params.id,
-        "siteName": props.props.site.title,
-           "shirt": shirt,"tong": tong,"gloves": gloves,"bag": bag
+            "siteName": props.props.site.title,
+            "shirt": shirt,"tong": tong,"gloves": gloves,"bag": bag
         };
 
         // console.log(ToolRequest)
@@ -83,7 +83,7 @@ export default function ToolRequest(props) {
         // this.props.createVolunteer(volunteer);
 
     };
-    if(props.props.site.authorId==props.props.firebase.auth.uid){
+    if(props.props.site.authorId === props.props.auth.uid){
          button = <Button variant="outlined" color="primary" onClick={handleClickOpen}>
         Send Tools Request
      </Button>
@@ -92,7 +92,6 @@ export default function ToolRequest(props) {
     return (
         <div>
             {button}
-            
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" style={{minWidth:300}}>
                 <Typography className={classes.dialogTitle} id="form-dialog-title">Tool Request</Typography>
                 <DialogContent>

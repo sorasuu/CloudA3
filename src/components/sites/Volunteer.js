@@ -214,8 +214,6 @@ const useStyles = makeStyles(theme => ({
 export default function EnhancedTable(props) {
   // console.log(props, 'props EnhancedTable');
   const volunteers = props.volunteers;
-  console.log(volunteers.length, 'volunteers range ne');
-  // console.log((volunteers[1].dob.toDate().toString()),'volunteer dob');
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("email");
