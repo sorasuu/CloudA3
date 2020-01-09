@@ -9,7 +9,6 @@ import { MapMarker } from "../maps/MapSiteDetail";
 import CollectionTable from "./collectionTable";
 import { Grid, Divider, Button } from "@material-ui/core";
 import Dropzone from "react-dropzone-uploader";
-import "react-dropzone-uploader/dist/styles.css";
 import { withScriptjs, withGoogleMap } from "react-google-maps";
 import * as XLSX from "xlsx";
 import * as FileSaver from "file-saver";
@@ -42,7 +41,6 @@ class SiteDetails extends React.Component {
         { title: "SDT", field: "phoneNumber", type: "numeric" },
         { title: "Email", field: "email" }
       ],
-      agendaData: [],
       volunteers: [],
       phoneNumber: "",
       volunteerNum: "",
@@ -198,7 +196,8 @@ handleUploadSuccess = async filename => {
               <Grid container spacing={2}>
                 <Grid item xs={6}>
                   <h5>Agenda</h5>
-                  <AgendaTable date={this.props.site.date} />
+                  {this.props.site?<AgendaTable props= {this.props}  />:<p>Loading...</p>}
+                  
                   {this.state.owner ? null : (
                       <div style={{textAlign: "center", paddingTop:20}}>
                       <VolunteerForm props={this.props} />

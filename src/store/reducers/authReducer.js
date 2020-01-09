@@ -33,7 +33,7 @@ const authReducer = (state = initState, action) => {
         console.log('login error');
         return {
           ...state,
-          // authError: 'Login failed'
+          authError: null
         }
     case 'LOGIN_FACEBOOK_SUCCESS':
       console.log('login success');
