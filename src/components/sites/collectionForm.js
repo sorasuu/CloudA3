@@ -61,6 +61,7 @@ export default class CollectionForm extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.handleSubmitCollection = this.handleSubmitCollection.bind(this);
     console.log(this.props, "collectionForm")
   }
   handleChange(e) {
@@ -82,8 +83,9 @@ export default class CollectionForm extends Component {
         nonRecycle:this.state.nonRecycle,
         nonRecyclePiece: this.state.nonRecyclePiece,
         participants: this.state.participants
-    }
-    this.props.editSite({id: this.props.match.param.id, ...this.props.site, summary: summary})
+    };
+    this.props.id.editSite({id: this.props.id.match.params.id, ...this.props.site, summary: summary})
+    this.handleClose()
   }
   render() {
     return (
