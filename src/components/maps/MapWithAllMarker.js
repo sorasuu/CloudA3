@@ -1,13 +1,17 @@
-
 import React from "react";
 import { withGoogleMap, withScriptjs } from "react-google-maps";
 import MapClusterer from "./MapClusterer";
 import {
-  MenuList,  MenuItem,
-  Grid,  withStyles, Popper,
+  MenuList,
+  MenuItem,
+  Grid,
+  withStyles,
+  Popper,
   ClickAwayListener,
-  Grow,  Avatar,
-  Card,  CardHeader,
+  Grow,
+  Avatar,
+  Card,
+  CardHeader,
   CardContent
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
@@ -16,17 +20,18 @@ import { firestoreConnect } from "react-redux-firebase";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import Paper from "@material-ui/core/Paper";
-import FilterListIcon from '@material-ui/icons/FilterList';
+import FilterListIcon from "@material-ui/icons/FilterList";
 
 const API_KEY = "AIzaSyCukFLNeMl4inkvLQ8ZNNQzbC3q1zmcibI";
 const MapWrapped = withScriptjs(withGoogleMap(MapClusterer));
 const useStyles = theme => ({
   card: {
-    display: "flex"
+    display: "flex",
+    width: "100%"
   },
   media: {
     height: 0,
-    paddingTop: '56.25%',
+    paddingTop: "56.25%"
   },
   details: {
     display: "flex",
@@ -64,14 +69,14 @@ class MapWithAllMarker extends React.Component {
     super(props);
     this.state = {
       columns: [
-        { title: "Tiêu Đề", field: "name", phoneNumber: '' },
+        { title: "Tiêu Đề", field: "name", phoneNumber: "" },
         { title: "Ảnh Đại Diện", field: "avatar" },
-        { title: "Event Date", field: 'startDate' },
-        { title: 'address', field: 'address' }
+        { title: "Event Date", field: "startDate" },
+        { title: "address", field: "address" }
       ],
       dataApproval: [],
-      currentLocation: {lat:'', lng:''},
-      currentId: '',
+      currentLocation: { lat: "", lng: "" },
+      currentId: ""
     };
   }
 
@@ -86,9 +91,9 @@ class MapWithAllMarker extends React.Component {
         const data = {
           name: siteApproved.title,
           address: siteApproved.address,
-          date: (siteApproved.date.toDate()).toLocaleString('en-GB'),
+          date: siteApproved.date.toDate().toLocaleString("en-GB"),
           id: siteApproved.id,
-          avatar: siteApproved.image,
+          avatar: siteApproved.uploadURL,
           location: siteApproved.location
         };
         sitesApprove.push(data);
@@ -100,8 +105,8 @@ class MapWithAllMarker extends React.Component {
   }
 
   render() {
-    console.log(this.state.dataApproval, 'dataApproval');
     const AllSitesTable = () => {
+      // console.log(this.props.firestore.data.volunteers ? this.props.firestore.data.volunteers.length : null, 'so ng tham gia');
       const { classes } = this.props;
       const [open, setOpen] = React.useState(false);
       const anchorRef = React.useRef(null);
@@ -133,33 +138,32 @@ class MapWithAllMarker extends React.Component {
         prevOpen.current = open;
       }, [open]);
 
-      const handleMouseOver = (event) => {
+      const handleMouseOver = event => {
         const currentLocation = {
-          lat: event.currentTarget.getAttribute("valueLat"),
-          lng: event.currentTarget.getAttribute("valueLng")
+          lat: event.currentTarget.getAttribute("valuelat"),
+          lng: event.currentTarget.getAttribute("valuelng")
         };
-        this.setState({ currentId: event.currentTarget.getAttribute("value")});
+        this.setState({ currentId: event.currentTarget.getAttribute("value") });
         this.setState({ currentLocation: currentLocation });
-        console.log(this.state.currentLocation.lat, this.state.currentLocation.lng, "day la location");
-        console.log(event.currentTarget.getAttribute("value"), 'day la id')
+
       };
       return (
-
         <Grid container spacing={2}>
           <Grid container spacing={2}>
-            <Grid item xs={8} md={8} style={{ textAlign: 'center' }}>
+            <Grid item xs={8} md={8} style={{ textAlign: "center" }}>
               <Link to="/create">
                 <Button color="primary" background-color="primary">
                   Tạo Sự Kiện Mới
-              </Button>
+                </Button>
               </Link>
             </Grid>
-            <Grid item xs={4} md={4} style={{ textAlign: 'center' }}>
+            <Grid item xs={4} md={4} style={{ textAlign: "center" }}>
               <FilterListIcon
                 ref={anchorRef}
                 aria-controls={open ? "menu-list-grow" : undefined}
                 aria-haspopup="true"
-                onClick={handleToggle} />
+                onClick={handleToggle}
+              />
 
               <Popper
                 open={open}
@@ -173,9 +177,7 @@ class MapWithAllMarker extends React.Component {
                     {...TransitionProps}
                     style={{
                       transformOrigin:
-                        placement === "bottom"
-                          ? "center top"
-                          : "center bottom"
+                        placement === "bottom" ? "center top" : "center bottom"
                     }}
                   >
                     <Paper>
@@ -187,13 +189,13 @@ class MapWithAllMarker extends React.Component {
                         >
                           <MenuItem onClick={handleClose}>
                             Địa Điểm Tổ Chức
-                              </MenuItem>
+                          </MenuItem>
                           <MenuItem onClick={handleClose}>
                             Số Người Tham Gia
-                              </MenuItem>
+                          </MenuItem>
                           <MenuItem onClick={handleClose}>
                             Ngày Tổ Chức
-                              </MenuItem>
+                          </MenuItem>
                         </MenuList>
                       </ClickAwayListener>
                     </Paper>
@@ -204,37 +206,34 @@ class MapWithAllMarker extends React.Component {
           </Grid>
 
           {this.state.dataApproval.map(row => {
-            console.log(row.location.lat, 'row location ne');
             return (
-              <Card className={classes.card}
-                valueLat = {row.location.lat}
-                    valueLng={row.location.lng}
-                    value = {row.id}
-                onMouseOver={handleMouseOver} 
-                style={{marginBottom:5}}
-                key={row.id}>
-               <Link to={`site/${row.id}`}>
-                <CardHeader
-                  avatar={
-                    <Avatar className={classes.avatar}>
-                      <img src={row.avatar}  alt={'picture'}/>
-                    </Avatar>
-                  }
-                  title={row.name}
-                  subheader={row.date}
-                />
-                <CardContent>
-                  {row.address}
-                </CardContent>
+              <Card
+                className={classes.card}
+                valuelat={row.location.lat}
+                valuelng={row.location.lng}
+                value={row.id}
+                onMouseOver={handleMouseOver}
+                style={{ marginBottom: 5 }}
+                key={row.id}
+              >
+                <Link to={`site/${row.id}`}>
+                  <CardHeader
+                    avatar={
+                      <Avatar className={classes.avatar}>
+                        <img src={row.avatar} alt={"picture"} />
+                      </Avatar>
+                    }
+                    title={row.name}
+                    subheader={row.date}
+                  />
+                  <CardContent>{row.address}</CardContent>
                 </Link>
               </Card>
             );
           })}
-
         </Grid>
-
-    );
-  };
+      );
+    };
     return (
       // <Grid container spacing={3}>
       this.state.dataApproval ? (
@@ -243,7 +242,6 @@ class MapWithAllMarker extends React.Component {
             <AllSitesTable />
           </Grid>
           <Grid item xs={1}>
-            <img src={'data:image/jpeg;base64,/9j/4AAQSkZJRgABAgAAAQABAAD'}/>
             {[
               "https://vietnamsachvaxanh.org/wp-content/uploads/a1.-HCMC-US-Consulate-logo-high-ress.png",
               "https://vietnamsachvaxanh.org/wp-content/uploads/a1.-SSISs.png",
@@ -263,11 +261,10 @@ class MapWithAllMarker extends React.Component {
               mapElement={<div style={{ height: `100%` }} />}
               props={this.props}
               currentLocation={this.state.currentLocation}
-              currentId = {this.state.currentId}
+              currentId={this.state.currentId}
             />
           </Grid>
           <Grid item xs={1}>
-
             {[
               "https://vietnamsachvaxanh.org/wp-content/uploads/vespa-adventures.png",
               "https://vietnamsachvaxanh.org/wp-content/uploads/a2000px-Intel-logo.svgs_.png",
@@ -285,11 +282,13 @@ class MapWithAllMarker extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-
+const mapStateToProps = state => {
+  console.log(state, 'state MapWithAllMarkers ne');
+  const volunteers = state.firestore.ordered.volunteers;
   return {
     sites: state.firestore.ordered.sitesApproved,
     sitesApproved: state.firestore.ordered.sitesApproved,
+    volunteers: volunteers
     // chosenPlaceId: state.site.id
   };
 };
@@ -301,9 +300,12 @@ export default compose(
       collection: "sites",
       where: [["pending", "==", false]],
       storeAs: "sitesApproved"
+    },
+    {
+      collection: 'sites',
+      
     }
-    // { collection: 'sites', where:[["pending","==",false]] },
+
     // { collection: 'notifications', limit: 3, orderBy: ['time', 'desc']}
   ])
 )(withStyles(useStyles)(MapWithAllMarker));
-

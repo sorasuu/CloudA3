@@ -3,8 +3,7 @@ import { GoogleMap, Marker, InfoWindow } from "react-google-maps";
 import { Link } from "react-router-dom";
 
 function MapClusterer(props) {
-  // console.log(props);
-  console.log(props.currentLocation, "currentlocation");
+  // console.log(props.currentLocation, "currentlocation");
   const [isOpen, setOpenInfo] = useState(false);
   const [markerIndex, setMarkerIndex] = useState(0);
   const {

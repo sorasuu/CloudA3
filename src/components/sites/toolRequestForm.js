@@ -5,6 +5,21 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import {makeStyles, Typography} from "@material-ui/core";
+
+const useStyles = makeStyles(theme => ({
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+        maxWidth: 300
+    },
+    dialogTitle:{
+        fontSize: 30,
+        fontFamily:'Montserrat, sans-serif',
+        padding:20
+    },
+}));
+
 
 function FormError(props) {
     if (props.isHidden) {
@@ -22,7 +37,9 @@ const validateInput = checkingText => {
     }
 };
 
+
 export default function ToolRequest() {
+    const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [shirt, setShirt] = React.useState(0);
     const [tong, setTong] = React.useState(0);
@@ -37,34 +54,35 @@ export default function ToolRequest() {
     };
 
     const handleChangeShirt = e => {
-       setShirt(e)
+       setShirt(e.target.value)
     };
     const handleChangeTong = e => {
-        setTong(e)
+        setTong(e.target.value)
     };
     const handleChangeGloves = e => {
-        setGloves(e)
+        setGloves(e.target.value)
     };
     const handleChangeBag = e => {
-        setBag(e)
+        setBag(e.target.value)
     };
 
     const handleSubmit = e => {
         e.preventDefault();
-        // console.log(this.state);
         const ToolRequest = {
             shirt, tong, gloves, bag
         };
+        console.log(ToolRequest, 'toollllllll');
         // this.props.createVolunteer(volunteer);
         this.props.history.push("/");
     };
+
     return (
         <div>
             <Button variant="outlined" color="primary" onClick={handleClickOpen}>
                Send Tools Request
             </Button>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" style={{minWidth:300}}>
-                <DialogTitle id="form-dialog-title">Tool Request</DialogTitle>
+                <Typography className={classes.dialogTitle} id="form-dialog-title">Tool Request</Typography>
                 <DialogContent>
                     <form className="white" onSubmit={handleSubmit}>
                         <div>Shirt</div>
@@ -73,6 +91,7 @@ export default function ToolRequest() {
                                 type="numeric"
                                 id="shirt"
                                 onChange={handleChangeShirt}
+                                value={shirt}
                                 required
                             />
                         </div>
@@ -83,6 +102,7 @@ export default function ToolRequest() {
                                 type="numeric"
                                 id="tong"
                                 onChange={handleChangeTong}
+                                value={tong}
                                 required
                             />
                         </div>
@@ -93,6 +113,7 @@ export default function ToolRequest() {
                                 type="numeric"
                                 id="gloves"
                                 onChange={handleChangeGloves}
+                                value={gloves}
                                 required
                             />
                         </div>
@@ -103,6 +124,7 @@ export default function ToolRequest() {
                                 type="numeric"
                                 id="bag"
                                 onChange={handleChangeBag}
+                                value={bag}
                                 required
                             />
                         </div>

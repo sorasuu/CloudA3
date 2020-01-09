@@ -18,6 +18,7 @@ import ToolRequest from "./toolRequestForm";
 import AgendaTable from "./AgendaTable";
 import EnhancedTable from "./Volunteer";
 import CarouselImage from "../layout/ImageGridView";
+import CollectionForm from "./collectionForm";
 
 const API_KEY = "AIzaSyCukFLNeMl4inkvLQ8ZNNQzbC3q1zmcibI";
 
@@ -123,15 +124,7 @@ class SiteDetails extends React.Component {
     if (site && this.state.volunteers) {
       return (
         <div>
-
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <CarouselImage />
-            </Grid>
-            <Grid item xs={6}>
-              <CarouselImage />
-            </Grid>
-          </Grid>
+          <CarouselImage/>
           <div className="container section site-details">
             <div>
               <div style={{ textAlign: "center" }}>
@@ -235,7 +228,7 @@ class SiteDetails extends React.Component {
                       </div>
                   ) : null}
                 </div></Grid>
-
+                  <CollectionForm/>
               </Grid>
               <h5 style={{ textAlign: "center" }}>Collection Table</h5>
               <CollectionTable props={this.props} />
