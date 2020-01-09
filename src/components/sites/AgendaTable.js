@@ -51,18 +51,15 @@ const useStyles = makeStyles({
 export default function AgendaTable(props) {
   console.log(props, "agenda props");
   const classes = useStyles();
-  const rows = [
-    createData(props.date.toDate().toLocaleString("en-GB"), "Event Begin"),
-    activities
-  ];
+  const rows =props.props.site.agendas
   const [open, setOpen] = React.useState(false);
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [activity, setActivity] = React.useState();
   const handleChangeActivity = e => {
-    setActivity(e);
+    setActivity(e.target.value);
   };
   const handleDateChange = e => {
-    setSelectedDate(e);
+    setSelectedDate(e.target.value);
   };
   const handleClickOpen = () => {
     setOpen(true);
@@ -71,7 +68,24 @@ export default function AgendaTable(props) {
   const handleClose = () => {
     setOpen(false);
   };
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+      var agendas = null
+        if (rows!== undefined) {
+              agendas = [      ...rows,
+                {"activity":activity ,"selectedDate": selectedDate}]
+        
+        }
+        else{
+              agendas = [{"activity":activity ,"selectedDate": selectedDate}]
+        
+            
+        }
+       
+        props.props.editSite({...props.props.site,
+            "agendas":agendas,"id":props.props.match.params.id});
+    
+    setOpen(false);
+  };
   return (
     <div>
       <TableContainer component={Paper}>
@@ -83,14 +97,14 @@ export default function AgendaTable(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, index) => (
+            {rows?rows.map((row, index) => (
               <StyledTableRow key={index}>
                 <StyledTableCell component="th" scope="row">
                   {row.date}
                 </StyledTableCell>
                 <StyledTableCell align="left">{row.activity}</StyledTableCell>
               </StyledTableRow>
-            ))}
+            )):<p>loading...</p>}
           </TableBody>
         </Table>
       </TableContainer>
