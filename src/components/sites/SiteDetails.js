@@ -22,6 +22,7 @@ import CarouselImage from "../layout/ImageGridView";
 import anh2 from "../../images/ok2.png";
 import FileUploader from "react-firebase-file-uploader";
 import firebase from "firebase";
+import CollectionForm from "./collectionForm";
 
 const API_KEY = "AIzaSyCukFLNeMl4inkvLQ8ZNNQzbC3q1zmcibI";
 
@@ -128,14 +129,7 @@ handleUploadSuccess = async filename => {
       return (
         <div>
 
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <CarouselImage />
-            </Grid>
-            <Grid item xs={6}>
-              <CarouselImage />
-            </Grid>
-          </Grid>
+          <CarouselImage/>
           <div className="container section site-details">
             <div>
               <div style={{ textAlign: "center" }}>
@@ -221,7 +215,7 @@ handleUploadSuccess = async filename => {
                 <Grid item xs={6}>
                   <EnhancedTable volunteers={this.state.volunteers} />
                   <div className="row">
-                    <div className="col xs=6 md=6 lg=6">
+                    <div className="col xs=4 md=4 lg=4">
                       <Button
                         variant="outlined"
                         color="primary"
@@ -230,8 +224,11 @@ handleUploadSuccess = async filename => {
                         Download Excel
                       </Button>
                     </div>
-                    <div className="col xs=6 md=6 lg=6">
+                    <div className="col xs=4 md=4 lg=4">
                       <ToolRequest props ={this.props}/>
+                    </div>
+                    <div className="col xs=4 md=4 lg=4">
+                      <CollectionForm/>
                     </div>
                   </div>
                 </Grid>
@@ -241,27 +238,27 @@ handleUploadSuccess = async filename => {
                   {this.state.owner ? (
                     <div className="container">
                       <FileUploader
-          accept="image/*"
-          name="image-uploader-multiple"
-          randomizeFilename
-          storageRef={firebase.storage().ref("images")}
-          onUploadStart={this.handleUploadStart}
-          onUploadError={this.handleUploadError}
-          onUploadSuccess={this.handleUploadSuccess}
-          onProgress={this.handleProgress}
-          multiple
-        />
+                        accept="image/*"
+                        name="image-uploader-multiple"
+                        randomizeFilename
+                        storageRef={firebase.storage().ref("images")}
+                        onUploadStart={this.handleUploadStart}
+                        onUploadError={this.handleUploadError}
+                        onUploadSuccess={this.handleUploadSuccess}
+                        onProgress={this.handleProgress}
+                        multiple
+                      />
  
-        <p>Progress: {this.state.uploadProgress}</p>
- 
-        <p>Filenames: {this.state.filenames.join(", ")}</p>
- 
-        <div>
-          {this.state.downloadURLs.map((downloadURL, i) => {
-            // console.log(this.state.downloadURLs)
-            return <img key={i} src={downloadURL} />;
-          })}
-        </div>
+                      {/*<p>Progress: {this.state.uploadProgress}</p>*/}
+
+                      {/*<p>Filenames: {this.state.filenames.join(", ")}</p>*/}
+
+                      {/*<div>*/}
+                      {/*  {this.state.downloadURLs.map((downloadURL, i) => {*/}
+                      {/*    // console.log(this.state.downloadURLs)*/}
+                      {/*    return <img key={i} src={downloadURL} />;*/}
+                      {/*  })}*/}
+                      {/*</div>*/}
                     </div>
                   ) : null}
                 </Grid>
