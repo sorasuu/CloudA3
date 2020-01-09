@@ -27,10 +27,6 @@ const useStyles = makeStyles({
 //   return `${num.toFixed(2)}`;
 // }
 
-function createRow(desc, items, qty, weight) {
-  return { desc, items, qty, weight };
-}
-
 function subtotal(items) {
   const totalQty = items.map(({ qty }) => qty).reduce((sum, i) => sum + i, 0);
   const totalWeight = items
@@ -39,30 +35,9 @@ function subtotal(items) {
   return { totalQty, totalWeight };
 }
 
-const rows = [
-  createRow(
-    "Organic",
-    ["Food", "Food Soiled Paper", "Non-Hazardous Wood Waste", "Green Waste"],
-    100,
-    115
-  ),
-  createRow(
-    "Recyclable",
-    ["Paper", "Glass", "Metals", "Food Scraps"],
-    [10,20,30,40],
-    [15,25,35,45]
-  ),
-  createRow(
-    "Non-Recyclable",
-    ["Plastics", "Metals", "Steels", "Batteries"],
-    2,
-    179.9
-  )
-];
-
-const total = subtotal(rows);
 function CollectionTable(props) {
-  // console.log(props, "prop trong ColTab");
+  console.log(props, "prop trong ColTab");
+  const summary = props.props.site.summary;
   const classes = useStyles();
 
   return (
@@ -70,29 +45,40 @@ function CollectionTable(props) {
       <Table className={classes.table} aria-label="spanning table">
         <TableHead>
           <TableRow>
-            <StyledTableCell align="left">Desc</StyledTableCell>
-            <StyledTableCell align="right">Qty.</StyledTableCell>
-            <StyledTableCell align="right">Weight</StyledTableCell>
+            <StyledTableCell align="left">Waste Types</StyledTableCell>
+            <StyledTableCell align="right">Qty.(unit)</StyledTableCell>
+            <StyledTableCell align="right">Weight(kg)</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
+          <TableRow>
+            <TableCell align={"left"}>Organic</TableCell>
+            <TableCell align="right">{summary.organicPiece}</TableCell>
+            <TableCell align="right">{summary.organic}</TableCell>
+
+          </TableRow>
+          <TableRow>
+            <TableCell align={"left"}>Recyclable</TableCell>
+            <TableCell align="right">{summary.recyclePiece}</TableCell>
+            <TableCell align="right">{summary.recycle}</TableCell>
+
+          </TableRow>
+          <TableRow>
+            <TableCell align={"left"}>Non-Recyclable</TableCell>
+            <TableCell align="right">{summary.nonRecyclePiece}</TableCell>
+            <TableCell align="right">{summary.nonRecycle}</TableCell>
+
+          </TableRow>
           <TableRow style={{ background: "lightgreen" }}>
             <TableCell align={"left"}>Total</TableCell>
-            <TableCell align="right">{total.totalQty}</TableCell>
-            {/*<TableCell align="right">{ccyFormat(total.totalWeight)}</TableCell>*/}
+            <TableCell align="right">{summary.organicPiece + summary.recyclePiece + summary.nonRecyclePiece}</TableCell>
+            <TableCell align="right">{summary.organic + summary.recycle + summary.nonRecycle}</TableCell>
           </TableRow>
-          {rows.map(row => (
-            <TableRow key={row.desc}>
-              <TableCell>{row.desc}</TableCell>
-              <TableCell align="right">{row.qty}</TableCell>
-              {/*<TableCell align="right">{ccyFormat(row.weight)}</TableCell>*/}
-            </TableRow>
-          ))}
 
-          <TableRow style={{ background: "lightgreen" }}>
+          <TableRow>
             <TableCell align={"center"}>Number of Participants</TableCell>
             <TableCell align="right" colSpan={3}>
-              1SoGiDo
+              {summary.participants}
             </TableCell>
           </TableRow>
         </TableBody>

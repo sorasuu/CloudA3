@@ -190,8 +190,10 @@ handleUploadSuccess = async filename => {
               <Grid container spacing={2}>
                 <Grid item xs={6}>
                   <h5>Agenda</h5>
-                  {this.props.site?<AgendaTable props= {this.props}  />:<p>Loading...</p>}
+
+                  {this.props.site?<AgendaTable props= {this.props}  />:null}
                   
+
                   {this.state.owner ? null : (
                       <div style={{textAlign: "center", paddingTop:20}}>
                       <VolunteerForm props={this.props} />
@@ -209,12 +211,10 @@ handleUploadSuccess = async filename => {
                   />
                 </Grid>
               </Grid>
+              <EnhancedTable volunteers={this.state.volunteers} />
 
-              <Grid container spacing={3}>
-                <Grid item xs={6}>
-                  <EnhancedTable volunteers={this.state.volunteers} />
-                  <div className="row">
-                    <div className="col xs=4 md=4 lg=4">
+              <Grid container spacing={4}>
+                <Grid item xs={3}>
                       <Button
                         variant="outlined"
                         color="primary"
@@ -222,45 +222,41 @@ handleUploadSuccess = async filename => {
                       >
                         Download Excel
                       </Button>
-                    </div>
-                    <div className="col xs=4 md=4 lg=4">
+                </Grid>
+                    <Grid item xs={3}>
                       <ToolRequest props ={this.props}/>
-                    </div>
-                    <div className="col xs=4 md=4 lg=4">
-                      <CollectionForm/>
-                    </div>
-                  </div>
-                </Grid>
-                <Grid item xs={6}>
-                  {/*Event Pictures*/}
-                  <CarouselImage />
-                  {this.state.owner ? (
-                    <div className="container">
-                      <FileUploader
-                        accept="image/*"
-                        name="image-uploader-multiple"
-                        randomizeFilename
-                        storageRef={firebase.storage().ref("images")}
-                        onUploadStart={this.handleUploadStart}
-                        onUploadError={this.handleUploadError}
-                        onUploadSuccess={this.handleUploadSuccess}
-                        onProgress={this.handleProgress}
-                        multiple
-                      />
- 
-                      {/*<p>Progress: {this.state.uploadProgress}</p>*/}
+                    </Grid>
+                    <Grid item xs={3}>
+                      <CollectionForm  id = {this.props}/>
+                    </Grid>
+                    <Grid item xs={3}>
+                      {this.state.owner ? (
+                          <div className="container">
+                            <FileUploader
+                                accept="image/*"
+                                name="image-uploader-multiple"
+                                randomizeFilename
+                                storageRef={firebase.storage().ref("images")}
+                                onUploadStart={this.handleUploadStart}
+                                onUploadError={this.handleUploadError}
+                                onUploadSuccess={this.handleUploadSuccess}
+                                onProgress={this.handleProgress}
+                                multiple
+                            />
 
-                      {/*<p>Filenames: {this.state.filenames.join(", ")}</p>*/}
+                            {/*<p>Progress: {this.state.uploadProgress}</p>*/}
 
-                      {/*<div>*/}
-                      {/*  {this.state.downloadURLs.map((downloadURL, i) => {*/}
-                      {/*    // console.log(this.state.downloadURLs)*/}
-                      {/*    return <img key={i} src={downloadURL} />;*/}
-                      {/*  })}*/}
-                      {/*</div>*/}
-                    </div>
-                  ) : null}
-                </Grid>
+                            {/*<p>Filenames: {this.state.filenames.join(", ")}</p>*/}
+
+                            {/*<div>*/}
+                            {/*  {this.state.downloadURLs.map((downloadURL, i) => {*/}
+                            {/*    // console.log(this.state.downloadURLs)*/}
+                            {/*    return <img key={i} src={downloadURL} />;*/}
+                            {/*  })}*/}
+                            {/*</div>*/}
+                          </div>
+                      ) : null}
+                    </Grid>
               </Grid>
               <h5 style={{ textAlign: "center" }}>Collection Table</h5>
               <CollectionTable props={this.props} />

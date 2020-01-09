@@ -77,10 +77,10 @@ export default function AgendaTable(props) {
         }
         else{
               agendas = [{"activity":activity ,"selectedDate": selectedDate}]
-        
-            
+ 
         }
        
+
         props.props.editSite({...props.props.site,
             "agendas":agendas,"id":props.props.match.params.id});
     

@@ -65,7 +65,7 @@ export default class CollectionForm extends Component {
     console.log(this.props, "collectionForm")
   }
   handleChange(e) {
-    this.setState({ [e.target.id]: e.target.value });
+    this.setState({ [e.target.id]: parseInt(e.target.value) });
   }
   handleClickOpen() {
     this.setState({ isOpen: true });
@@ -76,7 +76,8 @@ export default class CollectionForm extends Component {
   handleSubmitCollection(event) {
     event.preventDefault();
     const summary = {
-        // organic: this.state.organic,
+
+        organic: this.state.organic,
         organicPiece: this.state.organicPiece,
         recycle: this.state.recycle,
         recyclePiece: this.state.recyclePiece,
@@ -87,6 +88,7 @@ export default class CollectionForm extends Component {
     this.props.id.editSite({id: this.props.id.match.params.id, ...this.props.site, summary: summary})
     this.handleClose()
   };
+
   render() {
     return (
       <div>
@@ -185,7 +187,7 @@ export default class CollectionForm extends Component {
                         Pieces(#)
                         <input
                           type="numeric"
-                          id="nonRecyclablePiece"
+                          id="nonRecyclePiece"
                           onChange={this.handleChange}
                           value={this.state.nonRecyclePiece}
                           defaultValue={0}
@@ -214,7 +216,7 @@ export default class CollectionForm extends Component {
                   <label>Participants:
                 <input
                   type="numeric"
-                  id="participant"
+                  id="participants"
                   onChange={this.handleChange}
                   value={this.state.participants}
                   defaultValue={0}
