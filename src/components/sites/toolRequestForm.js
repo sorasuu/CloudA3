@@ -37,7 +37,7 @@ const validateInput = checkingText => {
     }
 };
 
-export default function ToolRequest() {
+export default function ToolRequest(props) {
     const classes = useStyles();
 
     const [open, setOpen] = React.useState(false);
@@ -78,8 +78,8 @@ export default function ToolRequest() {
            "shirt": shirt,"tong": tong,"gloves": gloves,"bag": bag
         };
 
-        console.log(ToolRequest)
-        // props.props.sendTool(ToolRequest)
+        // console.log(ToolRequest)
+        props.props.sendTool(ToolRequest)
         // this.props.createVolunteer(volunteer);
 
     };
