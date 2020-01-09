@@ -107,7 +107,7 @@ export default function AgendaTable(props) {
                 </StyledTableCell>
                 <StyledTableCell align="left">{row.activity}</StyledTableCell>
               </StyledTableRow>
-            )):<p>loading...</p>}
+            )):null}
           </TableBody>
         </Table>
       </TableContainer>

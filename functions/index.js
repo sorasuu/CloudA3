@@ -1,14 +1,15 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const sendgridemail = require('@sendgrid/mail');
-admin.initializeApp(functions.config().firebase);
+
+admin.initializeApp(functions.config().firebase);;
 
 const createNotification = ((notification) => {
   return admin.firestore().collection('notifications')
     .add(notification)
     .then(doc => console.log('notification added', doc));
 });
-const MY_SENDGRID_API_KEY="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"
+const MY_SENDGRID_API_KEY="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"
 sendgridemail.setApiKey(MY_SENDGRID_API_KEY);
 
 exports.siteCreated = functions.firestore
@@ -48,7 +49,8 @@ exports.siteApproved = functions.firestore
   //   // ... Your implementation here
   // },
     doc => {
-    const site = doc.data();
+      if (change.before.exists && change.after.exists) {
+    const site = doc.after.data();
     const notification = {
       content: 'điạ chỉ được xách nhận',
       user: `${site.authorName}`,
@@ -79,7 +81,7 @@ exports.siteApproved = functions.firestore
           }
       }
            
-         
+    }
 
   };
     return createNotification(notification)
@@ -109,21 +111,59 @@ exports.volunterJoined = functions.firestore
   return sendgridemail.send(msgbody)
                 .then(() => console.log('volunteer sent success') )
                 .catch(err => console.log(err) )});
-exports.updateVolunteerNum = functions.firestore.document()
-// exports.userJoined = functions.auth.user()
-//   .onCreate(user => {
-    
-//     return admin.firestore().collection('users')
-//       .doc(user.uid).get().then(doc => {
+exports.Emailvolunteer = functions.firestore
+  .document('emails/{emailId}')
+  .onCreate(doc => {
 
-//         const newUser = doc.data();
-//         const notification = {
-//           content: 'Joined the party',
-//           user: `${newUser.firstName} ${newUser.lastName}`,
-//           time: admin.firestore.FieldValue.serverTimestamp()
-//         };
+    const email = doc.data();
+    email.volunteer.forEach(element => {
+      
+  
+    const msgbody = {
+      to: element,
+      from: 'auto-reply@vnsachvaxanh.com',
+      templateId: 'd-950e4b7ffaaf4799bfa6ae4c1992436f',
+      "dynamic_template_data":{
+      text:email.text,
+        subject:  email.subject,}
+      };
+  return sendgridemail.send(msgbody)
+                .then(() => console.log('volunteer sent success') )
+                .catch(err => console.log(err) )}  );
+    });
+exports.volunterJoined = functions.firestore
+          .document('sites/{siteId}/volunteers/{volunteerId}')
+          .onCreate(doc => {
+              
+            const volunteer = doc.data();
+                  const msgbody = {
+                    to: volunteer.email,
+                    from: 'auto-reply@vnsachvaxanh.com',
+                    templateId: 'd-950e4b7ffaaf4799bfa6ae4c1992436f',
+                    "dynamic_template_data":{
+                    text:"Cảm ơn "+volunteer.name+" đã tham gia sự kiện Việt Nam Sạch & Xanh",
+                      subject:  'Cám Ơn Bạn Đã Tham Gia Sự Kiện',}
+                };
+                return sendgridemail.send(msgbody)
+                              .then(() => console.log('volunteer sent success') )
+                              .catch(err => console.log(err) )});
+exports.updateVolunteerNum = functions.firestore.document('sites/{siteId}/volunteers/{volunteerId}')
+    .onWrite((change, context) => {
 
-//         return createNotification(notification);
+    if (!change.before.exists) {
+        // New document Created : add one to count
 
-//       });
-// });
+        admin.firestore().doc("sites/{siteId}").update({numberOfVon: admin.firestore().FieldValue.increment(1)});
+
+    } else if (change.before.exists && change.after.exists) {
+        // Updating existing document : Do nothing
+
+    } else if (!change.after.exists) {
+        // Deleting document : subtract one from count
+
+        admin.firestore().doc("sites/{siteId}").update({numberOfVon: admin.firestore().FieldValue.increment(-1)});
+
+    }
+
+return;
+});

@@ -191,7 +191,7 @@ handleUploadSuccess = async filename => {
                 <Grid item xs={6}>
                   <h5>Agenda</h5>
 
-                  {this.props.site?<AgendaTable props= {this.props}  />:null}
+                  {this.props.site?<AgendaTable props= {this.props}  />:<p></p>}
                   
 
                   {this.state.owner ? null : (
@@ -259,7 +259,7 @@ handleUploadSuccess = async filename => {
                     </Grid>
               </Grid>
               <h5 style={{ textAlign: "center" }}>Collection Table</h5>
-              <CollectionTable props={this.props} />
+              {this.props.site.summary?<CollectionTable props={this.props} />:null}
             </div>
           </div>
         </div>

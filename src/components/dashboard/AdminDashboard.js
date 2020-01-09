@@ -6,6 +6,7 @@ import { firestoreConnect } from "react-redux-firebase";
 import { compose } from "redux";
 import { Redirect, Link } from "react-router-dom";
 import MaterialTable from "material-table";
+
 import {
   Tab,
   Tabs,
@@ -23,7 +24,7 @@ import {
   Avatar,
   ListItemText
 } from "@material-ui/core";
-import { editSite } from "../../store/actions/siteActions";
+import { updateSite } from "../../store/actions/siteActions";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -143,7 +144,7 @@ class AdminDashboard extends Component {
   }
   handleApproved = id => {
     console.log(id, this.props.sitesPendingis[id]);
-    this.props.editSite({
+    this.props.updateSite({
       ...this.props.sitesPendingis[id],
       pending: false,
       id: id
@@ -374,7 +375,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
   return {
-    editSite: site => dispatch(editSite(site))
+    updateSite: site => dispatch(updateSite(site))
   };
 };
 
