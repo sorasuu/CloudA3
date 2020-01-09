@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useCallback } from 'react'
 import { connect } from 'react-redux'
 import { createSite } from '../../store/actions/siteActions'
 import { Redirect } from 'react-router-dom'
@@ -53,6 +53,7 @@ class CreateSite extends Component {
     image: null,
     uploadURL: null,
     file:null,
+    organization:"",
   };
   handleChange = (e) => {
     this.setState({
@@ -97,16 +98,18 @@ createImage= (file)=>{
     }
     reader.readAsDataURL(file)
 }
-  onClickHandler = () => {
+  onClickHandler = (e) => {
     let binary = atob(this.state.image.split(',')[1])
     let array = []
     for (var i = 0; i < binary.length; i++) {
       array.push(binary.charCodeAt(i))
     }
     let blobData = new Blob([new Uint8Array(array)], {type: 'image/jpeg'})
+    this.setState({image: null})
     return axios.get(API_ENDPOINT).then((response)=>{
       console.log(response)
-      this.setState({uploadURL:response.data.uploadURL})
+      console.log(response.data.uploadURL.split('?')[0]) 
+      this.setState({uploadURL:response.data.uploadURL.split('?')[0]})
       return fetch(response.data.uploadURL, {
           method: 'PUT',
           body: blobData
@@ -143,7 +146,7 @@ createImage= (file)=>{
             <FormError type="title" isHidden={this.state.isInputValid} errorMessage={this.state.errorMessage}/>
           </div>
           <div className="input-field">
-            <textarea id="content" className="materialize-textarea" onChange={this.handleChange} required></textarea>
+            <textarea id="organization" className="materialize-textarea" onChange={this.handleChange} required></textarea>
             <label htmlFor="organization">Tổ Chức Thành Lập Sự Kiện</label>
             <FormError type="title" isHidden={this.state.isInputValid} errorMessage={this.state.errorMessage}/>
           </div>
@@ -151,7 +154,7 @@ createImage= (file)=>{
             <Grid item xs={6} md={6} lg={6}><ImageAudioVideo /></Grid>
           </Grid> */}
           <input type="file" name="file" onChange={(e)=>this.onFileChange(e)}/>
-          <button type="button" class="btn btn-success btn-block" onClick={this.onClickHandler}>Upload</button>
+          <button type="button" class="btn btn-success btn-block" onClick={(e)=>this.onClickHandler(e)}>Upload</button>
           <div className="input-field">
             <input type="text" id='phoneNumber' onChange={this.handleChange} required />
             <label htmlFor="title">Số Điện Thoại Liên Hệ</label>
@@ -181,7 +184,7 @@ createImage= (file)=>{
             />
         
           <div className="input-field">
-            <button className="btn lighten-1" color="#39B04B">Tạo Sự Kiện</button>
+            {this.state.uploadURL?<button className="btn lighten-1" color="#39B04B">Tạo Sự Kiện</button>:<button className="btn lighten-1" disabled="true" color="#39B04B">Tạo Sự Kiện</button>}
           </div>
         </form>
       </div>

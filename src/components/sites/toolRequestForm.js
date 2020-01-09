@@ -22,12 +22,13 @@ const validateInput = checkingText => {
     }
 };
 
-export default function ToolRequest() {
+export default function ToolRequest(props) {
     const [open, setOpen] = React.useState(false);
     const [shirt, setShirt] = React.useState(0);
     const [tong, setTong] = React.useState(0);
     const [gloves, setGloves] = React.useState(0);
     const [bag, setBag] = React.useState(0);
+    
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -51,12 +52,17 @@ export default function ToolRequest() {
 
     const handleSubmit = e => {
         e.preventDefault();
-        // console.log(this.state);
+        setOpen(false);
+        console.log(props);
         const ToolRequest = {
-            shirt, tong, gloves, bag
+            id:props.props.match.params.id,
+        "siteName": props.props.site.title,
+           "shirt": shirt,"tong": tong,"gloves": gloves,"bag": bag
         };
+        console.log(ToolRequest)
+        // props.props.sendTool(ToolRequest)
         // this.props.createVolunteer(volunteer);
-        this.props.history.push("/");
+
     };
     return (
         <div>

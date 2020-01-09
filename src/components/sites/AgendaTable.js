@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -57,11 +56,11 @@ const useStyles = makeStyles({
 class AgendaTable extends React.Component {
     constructor(props){
         super(props)
-        this.setState({
+        this.state={
             open:false,
             date: new Date(),
             activity:""
-        })
+        };
     }
     handleChange = (e) => {
         this.setState({
@@ -79,6 +78,7 @@ class AgendaTable extends React.Component {
         this.setState({open:false});
     };
     render(){
+        const {agenda}= this.props
         return (
             <div>
             <TableContainer component={Paper}>

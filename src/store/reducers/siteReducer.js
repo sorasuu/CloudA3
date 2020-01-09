@@ -8,6 +8,12 @@ const siteReducer = (state = initState, action) => {
     case 'CREATE_SITE_ERROR':
       console.log('create site error');
       return state;
+    case 'TOOL_SITE_SUCCESS':
+      console.log('tool site error');
+      return state;
+    case 'TOOL_SITE_ERROR':
+      console.log('tool site error');
+      return state;
     default:
       return state;
   }
