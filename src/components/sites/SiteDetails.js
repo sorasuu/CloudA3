@@ -228,7 +228,7 @@ handleUploadSuccess = async filename => {
                       <ToolRequest props ={this.props}/>
                     </div>
                     <div className="col xs=4 md=4 lg=4">
-                      <CollectionForm/>
+                      <CollectionForm id = {this.props}/>
                     </div>
                   </div>
                 </Grid>
