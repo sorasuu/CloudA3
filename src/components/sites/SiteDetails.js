@@ -1,4 +1,5 @@
 
+
 import React from "react";
 import { connect } from "react-redux";
 import { firestoreConnect } from "react-redux-firebase";
@@ -13,53 +14,19 @@ import { withScriptjs, withGoogleMap } from "react-google-maps";
 import * as XLSX from "xlsx";
 import * as FileSaver from "file-saver";
 import { createVolunteer } from "../../store/actions/voluteerAction";
-import { editSite } from "../../store/actions/siteActions";
+import { editSite, updateSite, sendTool } from "../../store/actions/siteActions";
 import ToolRequest from "./toolRequestForm";
 import AgendaTable from "./AgendaTable";
 import EnhancedTable from "./Volunteer";
 import CarouselImage from "../layout/ImageGridView";
-import CollectionForm from "./collectionForm";
+import anh2 from "../../images/ok2.png";
+import FileUploader from "react-firebase-file-uploader";
+import firebase from "firebase";
 
 const API_KEY = "AIzaSyCukFLNeMl4inkvLQ8ZNNQzbC3q1zmcibI";
 
 const MapWrapped = withScriptjs(withGoogleMap(MapMarker));
 
-const ImageAudioVideo = () => {
-  const getUploadParams = ({ meta }) => {
-    const url = "https://httpbin.org/post";
-    return {
-      url,
-      meta: { fileUrl: `${url}/${encodeURIComponent(meta.name)}` }
-    };
-  };
-
-  const handleChangeStatus = ({ meta }, status) => {
-    console.log(status, meta);
-  };
-
-  const handleSubmit = (files, allFiles) => {
-    console.log(files.map(f => f.meta));
-    allFiles.forEach(f => f.remove());
-  };
-
-  return (
-    <Dropzone
-      getUploadParams={getUploadParams}
-      onChangeStatus={handleChangeStatus}
-      onSubmit={handleSubmit}
-      accept="image/*,audio/*,video/*"
-      inputContent={(files, extra) =>
-        extra.reject
-          ? "Image, audio and video files only"
-          : "Upload Event Photos & Videos "
-      }
-      styles={{
-        dropzoneReject: { borderColor: "red", backgroundColor: "#DAA" },
-        inputLabel: (files, extra) => (extra.reject ? { color: "red" } : {})
-      }}
-    />
-  );
-};
 
 class SiteDetails extends React.Component {
   constructor(props) {
@@ -80,10 +47,46 @@ class SiteDetails extends React.Component {
       phoneNumber: "",
       volunteerNum: "",
       owner: false,
-      showRequest: false
+      showRequest: false,
+      filenames: [],
+      downloadURLs: [],
+      isUploading: false,
+      uploadProgress: 0
     };
   }
+  handleUploadStart = () =>
+  this.setState({
+    isUploading: true,
+    uploadProgress: 0
+  });
 
+handleProgress = progress =>
+  this.setState({
+    uploadProgress: progress
+  });
+
+handleUploadError = error => {
+  this.setState({
+    isUploading: false
+    // Todo: handle error
+  });
+  console.error(error);
+};
+
+handleUploadSuccess = async filename => {
+  const downloadURL = await firebase
+    .storage()
+    .ref("images")
+    .child(filename)
+    .getDownloadURL();
+
+  this.setState(oldState => ({
+    filenames: [...oldState.filenames, filename],
+    downloadURLs: [...oldState.downloadURLs, downloadURL],
+    uploadProgress: 100,
+    isUploading: false
+  }));
+};
   UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState({
       volunteers: nextProps.volunteers
@@ -124,7 +127,15 @@ class SiteDetails extends React.Component {
     if (site && this.state.volunteers) {
       return (
         <div>
-          <CarouselImage/>
+
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <CarouselImage />
+            </Grid>
+            <Grid item xs={6}>
+              <CarouselImage />
+            </Grid>
+          </Grid>
           <div className="container section site-details">
             <div>
               <div style={{ textAlign: "center" }}>
@@ -205,10 +216,12 @@ class SiteDetails extends React.Component {
                   />
                 </Grid>
               </Grid>
-              <EnhancedTable volunteers={this.state.volunteers} />
+
               <Grid container spacing={3}>
-                <Grid item xs={4}>
-                    <div className="col xs=4 md=4 lg=4">
+                <Grid item xs={6}>
+                  <EnhancedTable volunteers={this.state.volunteers} />
+                  <div className="row">
+                    <div className="col xs=6 md=6 lg=6">
                       <Button
                         variant="outlined"
                         color="primary"
@@ -217,18 +230,41 @@ class SiteDetails extends React.Component {
                         Download Excel
                       </Button>
                     </div>
+                    <div className="col xs=6 md=6 lg=6">
+                      <ToolRequest props ={this.props}/>
+                    </div>
+                  </div>
                 </Grid>
-                <Grid item xs={4}> <div className="col xs=4 md=4 lg=4">
-                  <ToolRequest />
-                </div></Grid>
-                <Grid item xs={4}> <div>
+                <Grid item xs={6}>
+                  {/*Event Pictures*/}
+                  <CarouselImage />
                   {this.state.owner ? (
-                      <div>
-                        <ImageAudioVideo />
-                      </div>
+                    <div className="container">
+                      <FileUploader
+          accept="image/*"
+          name="image-uploader-multiple"
+          randomizeFilename
+          storageRef={firebase.storage().ref("images")}
+          onUploadStart={this.handleUploadStart}
+          onUploadError={this.handleUploadError}
+          onUploadSuccess={this.handleUploadSuccess}
+          onProgress={this.handleProgress}
+          multiple
+        />
+ 
+        <p>Progress: {this.state.uploadProgress}</p>
+ 
+        <p>Filenames: {this.state.filenames.join(", ")}</p>
+ 
+        <div>
+          {this.state.downloadURLs.map((downloadURL, i) => {
+            // console.log(this.state.downloadURLs)
+            return <img key={i} src={downloadURL} />;
+          })}
+        </div>
+                    </div>
                   ) : null}
-                </div></Grid>
-                  <CollectionForm/>
+                </Grid>
               </Grid>
               <h5 style={{ textAlign: "center" }}>Collection Table</h5>
               <CollectionTable props={this.props} />
@@ -261,7 +297,9 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => {
   return {
     createVolunteer: volunteers => dispatch(createVolunteer(volunteers)),
-    editSite: site => dispatch(editSite(site))
+    editSite: site => dispatch(editSite(site)),
+    updateSite : site => dispatch(updateSite(site)),
+    sendTool: tool => dispatch(sendTool(tool))
   };
 };
 

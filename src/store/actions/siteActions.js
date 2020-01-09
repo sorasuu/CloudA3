@@ -45,4 +45,16 @@ export const updateSite = (siteField) => {
     });
   }
 };
+export const sendTool = (tool) =>{
+  return (dispatch , getState, {getFirestore})=>{
+    const firestore = getFirestore();
+    firestore.collection('tools').doc(tool.id).set({
+      tool
+    }).then(() => {
+      dispatch({ type: 'TOOL_SITE_SUCCESS' });
+    }).catch(err => {
+      dispatch({ type: 'TOOL_SITE_ERROR' }, err);
+    });
+  }
+}
 

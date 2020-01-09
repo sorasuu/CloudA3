@@ -1,20 +1,23 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { createSite } from "../../store/actions/siteActions";
-import { Redirect } from "react-router-dom";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import MapWithSearch from "../maps/MapWithSearch";
-import { toast } from "react-toastify";
-import Dropzone from "react-dropzone-uploader";
-import "react-dropzone-uploader/dist/styles.css";
-import axios from "axios";
-import { Grid } from "@material-ui/core";
-function FormError(props) {
-  if (props.isHidden) {
-    return null;
-  }
-  return <div className="form-warning">{props.errorMessage}</div>;
+
+import React, { Component, useCallback } from 'react'
+import { connect } from 'react-redux'
+import { createSite } from '../../store/actions/siteActions'
+import { Redirect } from 'react-router-dom'
+import DatePicker from 'react-datepicker'
+import "react-datepicker/dist/react-datepicker.css"
+import MapWithSearch from '../maps/MapWithSearch'
+import {toast } from 'react-toastify';
+import Dropzone from 'react-dropzone-uploader'
+import 'react-dropzone-uploader/dist/styles.css'
+import axios from "axios"
+import {Grid} from '@material-ui/core'
+function FormError(props){
+  if (props.isHidden){return null;}
+  return(
+    <div className="form-warning">
+      {props.errorMessage}
+    </div>
+  )
 }
 const API_ENDPOINT =
   "https://lddhkkp8ta.execute-api.ap-southeast-1.amazonaws.com/Prod";
@@ -44,7 +47,10 @@ class CreateSite extends Component {
     pending: true,
     image: null,
     uploadURL: null,
-    file: null
+
+    file:null,
+    organization:"",
+
   };
   handleChange = e => {
     this.setState({
@@ -77,34 +83,37 @@ class CreateSite extends Component {
     if (!files.length) return;
     this.createImage(files[0]);
   }
-  createImage = file => {
-    let reader = new FileReader();
-    reader.onload = e => {
-      console.log("length: ", e.target.result.includes("data:image/jpeg"));
-      if (!e.target.result.includes("data:image/jpeg")) {
-        return alert("Wrong file type - JPG only.");
-      }
-      if (e.target.result.length > MAX_IMAGE_SIZE) {
-        return alert("Image is loo large - 1Mb maximum");
-      }
-      this.state.image = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  };
-  onClickHandler = () => {
-    let binary = atob(this.state.image.split(",")[1]);
-    let array = [];
+
+createImage= (file)=>{
+        
+    let reader = new FileReader()
+    reader.onload = (e)=>{
+        console.log('length: ', e.target.result.includes('data:image/jpeg'))
+        if (!e.target.result.includes('data:image/jpeg')) {
+          return alert('Wrong file type - JPG only.')
+        }
+        if (e.target.result.length > MAX_IMAGE_SIZE) {
+          return alert('Image is loo large - 1Mb maximum')
+        }
+        this.state.image= e.target.result
+    }
+    reader.readAsDataURL(file)
+}
+  onClickHandler = (e) => {
+    let binary = atob(this.state.image.split(',')[1])
+    let array = []
     for (var i = 0; i < binary.length; i++) {
       array.push(binary.charCodeAt(i));
     }
-    let blobData = new Blob([new Uint8Array(array)], { type: "image/jpeg" });
-    return axios
-      .get(API_ENDPOINT)
-      .then(response => {
-        console.log(response);
-        this.setState({ uploadURL: response.data.uploadURL });
-        return fetch(response.data.uploadURL, {
-          method: "PUT",
+
+    let blobData = new Blob([new Uint8Array(array)], {type: 'image/jpeg'})
+    this.setState({image: null})
+    return axios.get(API_ENDPOINT).then((response)=>{
+      console.log(response)
+      console.log(response.data.uploadURL.split('?')[0]) 
+      this.setState({uploadURL:response.data.uploadURL.split('?')[0]})
+      return fetch(response.data.uploadURL, {
+          method: 'PUT',
           body: blobData
         })
           .then(res => {
@@ -163,12 +172,8 @@ class CreateSite extends Component {
             />
           </div>
           <div className="input-field">
-            <textarea
-              id="content"
-              className="materialize-textarea"
-              onChange={this.handleChange}
-              required
-            ></textarea>
+
+            <textarea id="organization" className="materialize-textarea" onChange={this.handleChange} required></textarea>
             <label htmlFor="organization">Tổ Chức Thành Lập Sự Kiện</label>
             <FormError
               type="title"
@@ -179,14 +184,9 @@ class CreateSite extends Component {
           {/* <Grid container spacing={3}>
             <Grid item xs={6} md={6} lg={6}><ImageAudioVideo /></Grid>
           </Grid> */}
-          <input type="file" name="file" onChange={e => this.onFileChange(e)} />
-          <button
-            type="button"
-            class="btn btn-success btn-block"
-            onClick={this.onClickHandler}
-          >
-            Upload
-          </button>
+
+          <input type="file" name="file" onChange={(e)=>this.onFileChange(e)}/>
+          <button type="button" class="btn btn-success btn-block" onClick={(e)=>this.onClickHandler(e)}>Upload</button>
           <div className="input-field">
             <input
               type="text"
@@ -225,9 +225,8 @@ class CreateSite extends Component {
           />
 
           <div className="input-field">
-            <button className="btn lighten-1" color="#39B04B">
-              Tạo Sự Kiện
-            </button>
+
+            {this.state.uploadURL?<button className="btn lighten-1" color="#39B04B">Tạo Sự Kiện</button>:<button className="btn lighten-1" disabled="true" color="#39B04B">Tạo Sự Kiện</button>}
           </div>
         </form>
       </div>

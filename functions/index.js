@@ -109,7 +109,7 @@ exports.volunterJoined = functions.firestore
   return sendgridemail.send(msgbody)
                 .then(() => console.log('volunteer sent success') )
                 .catch(err => console.log(err) )});
-
+exports.updateVolunteerNum = functions.firestore.document()
 // exports.userJoined = functions.auth.user()
 //   .onCreate(user => {
     
