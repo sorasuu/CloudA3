@@ -47,7 +47,15 @@ class CreateSite extends Component {
     pending: true,
     image: null,
     uploadURL: null,
-
+    summary:{
+      nonRecycle:0,
+      nonRecyclePiece:0,
+      organic:0,
+      organicPiece:0,
+      recycle: 0,
+      recyclePiece:0,
+      participants:0
+    },
     file:null,
     organization:"",
 
@@ -96,12 +104,12 @@ createImage= (file)=>{
           return alert('Image is loo large - 1Mb maximum')
         }
         this.state.image= e.target.result
-    }
+    };
     reader.readAsDataURL(file)
-}
+};
   onClickHandler = (e) => {
     let binary = atob(this.state.image.split(',')[1])
-    let array = []
+    let array = [];
     for (var i = 0; i < binary.length; i++) {
       array.push(binary.charCodeAt(i));
     }

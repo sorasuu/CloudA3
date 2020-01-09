@@ -21,8 +21,10 @@ const StyledTableCell = withStyles(theme => ({
     color: theme.palette.common.white
   },
   body: {
-    fontSize: 14
+    fontSize: 14,
+    width:100
   }
+
 }))(TableCell);
 
 const StyledTableRow = withStyles(theme => ({
@@ -32,14 +34,6 @@ const StyledTableRow = withStyles(theme => ({
     }
   }
 }))(TableRow);
-
-function createData(date, activity) {
-  return { date, activity };
-}
-const activities = [];
-function add(date, activity) {
-  activities.push(date, activity);
-}
 
 const useStyles = makeStyles({
   table: {
@@ -51,46 +45,66 @@ const useStyles = makeStyles({
 export default function AgendaTable(props) {
   console.log(props, "agenda props");
   const classes = useStyles();
-  const rows = [
-    createData(props.date.toDate().toLocaleString("en-GB"), "Event Begin"),
-    activities
-  ];
+  const rows =props.props.site.agendas;
   const [open, setOpen] = React.useState(false);
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [activity, setActivity] = React.useState();
   const handleChangeActivity = e => {
-    setActivity(e);
+    setActivity(e.target.value);
   };
   const handleDateChange = e => {
-    setSelectedDate(e);
+    setSelectedDate(e.target.value);
   };
   const handleClickOpen = () => {
     setOpen(true);
   };
 
+  const timeOptions={
+    hour12: false,
+    hour:  "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
+  };
   const handleClose = () => {
     setOpen(false);
   };
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+      var agendas = null;
+        if (rows!== undefined) {
+              agendas = [      ...rows,
+                {"activity":activity ,"selectedDate": selectedDate}]
+        
+        }
+        else{
+              agendas = [{"activity":activity ,"selectedDate": selectedDate}]
+        }
+        props.props.editSite({...props.props.site,
+            "agendas":agendas,"id":props.props.match.params.id});
+    
+    setOpen(false);
+  };
   return (
     <div>
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>Date</StyledTableCell>
+              <StyledTableCell style={{maxWidth:50}}>Date</StyledTableCell>
               <StyledTableCell align="center">Activity</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, index) => (
+            <StyledTableCell align={'right'}>{(props.props.site.date.toDate()).toLocaleString('en-GB')}</StyledTableCell>
+            <StyledTableCell align="left">Event Begin</StyledTableCell>
+
+            {rows?rows.map((row, index) => (
               <StyledTableRow key={index}>
-                <StyledTableCell component="th" scope="row">
-                  {row.date}
+                <StyledTableCell align={'right'} component="th" scope="row">
+                  {(row.selectedDate.toDate()).toLocaleTimeString("en-GB", timeOptions)}
                 </StyledTableCell>
                 <StyledTableCell align="left">{row.activity}</StyledTableCell>
               </StyledTableRow>
-            ))}
+            )):<p>loading...</p>}
           </TableBody>
         </Table>
       </TableContainer>

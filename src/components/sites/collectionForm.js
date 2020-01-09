@@ -65,7 +65,7 @@ export default class CollectionForm extends Component {
     console.log(this.props, "collectionForm")
   }
   handleChange(e) {
-    this.setState({ [e.target.id]: e.target.value });
+    this.setState({ [e.target.id]: parseInt(e.target.value) });
   }
   handleClickOpen() {
     this.setState({ isOpen: true });
@@ -76,7 +76,7 @@ export default class CollectionForm extends Component {
   handleSubmitCollection(event) {
     event.preventDefault();
     const summary = {
-        // organic: this.state.organic,
+        organic: this.state.organic,
         organicPiece: this.state.organicPiece,
         recycle: this.state.recycle,
         recyclePiece: this.state.recyclePiece,

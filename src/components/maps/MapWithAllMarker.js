@@ -101,6 +101,8 @@ class MapWithAllMarker extends React.Component {
       this.setState({
         dataApproval: sitesApprove
       });
+
+      console.log(this.state.dataApproval,"data approve")
     }
   }
 
@@ -301,11 +303,8 @@ export default compose(
       where: [["pending", "==", false]],
       storeAs: "sitesApproved"
     },
-    {
-      collection: 'sites',
-      
-    }
 
+    // { collection: 'sites', where:[["pending","==",false]] },
     // { collection: 'notifications', limit: 3, orderBy: ['time', 'desc']}
   ])
 )(withStyles(useStyles)(MapWithAllMarker));
